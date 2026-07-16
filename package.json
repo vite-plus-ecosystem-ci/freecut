@@ -113,11 +113,14 @@
     "playwright": "1.60.0",
     "tailwindcss": "4.2.2",
     "typescript": "7.0.2",
-    "vite-plus": "0.2.4"
+    "vite-plus": "0.0.0-commit.bb0445bf5599a389c324442a3f3f8a8a5db5d83d",
+    "vitest": "4.1.10"
   },
   "overrides": {
     "esbuild": "0.28.1",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.0.0-commit.bb0445bf5599a389c324442a3f3f8a8a5db5d83d",
+    "vitest": "4.1.10"
   },
   "packageManager": "npm@11.8.0"
 }
