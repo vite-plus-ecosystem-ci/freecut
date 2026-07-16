@@ -13,10 +13,7 @@ import {
   interpolateColorKeyframesToHex,
   keyframeValueToHexColor,
 } from './color-keyframes'
-import {
-  evaluateAudioPulseParams,
-  type AudioPulseFrameValues,
-} from './trigger-wave-motion-layer'
+import { evaluateAudioPulseParams, type AudioPulseFrameValues } from './trigger-wave-motion-layer'
 
 /**
  * Evaluate a trigger-wave effect's audio-pulse frame values once (or null when
@@ -82,6 +79,7 @@ const NON_ANIMATABLE_GPU_NUMBER_PARAMS: Record<string, ReadonlySet<string>> = {
   'gpu-scanlines': new Set(['speed']),
   'gpu-color-glitch': new Set(['speed']),
   'gpu-block-glitch': new Set(['speed']),
+  'gpu-pixel-sort': new Set(['length']),
 }
 
 function isGpuEffectParamVisible(

@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+// @vitest-environment node
+
+import { describe, expect, it } from 'vite-plus/test'
 
 import {
   EASING_PRESETS,
@@ -92,7 +94,9 @@ describe('presetMatchesEasing (identical-curve disambiguation)', () => {
 describe('effectiveBezier', () => {
   it('falls back to the linear diagonal when there is no shaped curve', () => {
     expect(effectiveBezier('linear', undefined)).toEqual({ x1: 0, y1: 0, x2: 1, y2: 1 })
-    expect(effectiveBezier('spring', { type: 'spring', spring: { tension: 1, friction: 1, mass: 1 } })).toEqual({
+    expect(
+      effectiveBezier('spring', { type: 'spring', spring: { tension: 1, friction: 1, mass: 1 } }),
+    ).toEqual({
       x1: 0,
       y1: 0,
       x2: 1,

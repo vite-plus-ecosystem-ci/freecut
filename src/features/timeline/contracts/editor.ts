@@ -32,6 +32,7 @@ export {
   getDefaultGeneratedLayerDurationInFrames,
 } from '../utils/generated-layer-items'
 export { findCompatibleTrackForItemType } from '../utils/track-item-compatibility'
+export { createOverlayLayerTrack } from '../utils/new-track-zone-media'
 export { createClassicTrack, getTrackKind } from '../utils/classic-tracks'
 export { getDefaultActiveTrackId } from '../utils/default-active-track'
 export { resolveEffectiveTrackStates } from '../utils/group-utils'
@@ -48,6 +49,13 @@ export {
   setEffectAudioPulse,
   bakeMotionToKeyframes,
 } from '../stores/actions/motion-modifier-actions'
+export {
+  applyTextMotionEffect,
+  updateTextMotionLive,
+  beginTextMotionEdit,
+  commitTextMotionEdit,
+  removeTextMotionEffect,
+} from '../stores/actions/text-motion-actions'
 export { captureAnimationFromItem, getPresetCompatibility } from '../deps/keyframe-editors'
 export { rateStretchItemWithoutHistory } from '../stores/actions/item-edit-actions'
 export { setInOutPointsWithoutHistory } from '../stores/actions/marker-actions'

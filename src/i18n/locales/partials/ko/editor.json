@@ -2,8 +2,7 @@
   "editor": {
     "miniTimeline": {
       "inPoint": "인 포인트",
-      "outPoint": "아웃 포인트",
-      "markerAtFrame": "프레임 {{frame}}의 마커"
+      "outPoint": "아웃 포인트"
     },
     "animateTimeline": {
       "label": "애니메이트 타임라인",
@@ -112,6 +111,9 @@
     },
     "localInferencePill": {
       "loading": "로컬 AI 로딩 중",
+      "downloading": "로컬 AI 다운로드 중",
+      "loadingCache": "로컬 AI 캐시에서 로딩 중",
+      "preparing": "로컬 AI 준비 중",
       "active": "로컬 AI 활성",
       "error": "로컬 AI 오류",
       "ready": "로컬 AI 준비됨",
@@ -227,9 +229,15 @@
       "frame": "프레임",
       "time": "시간",
       "label": "레이블",
-      "labelPlaceholder": "레이블 입력...",
       "color": "색상",
       "deleteMarker": "마커 삭제"
+    },
+    "markerList": {
+      "title": "마커",
+      "empty": "마커 없음",
+      "emptyHint": "M 키를 눌러 재생 헤드에 마커 추가",
+      "clearAll": "모두 지우기",
+      "remove": "마커 제거"
     },
     "canvasPanel": {
       "updateFailed": "캔버스 설정을 업데이트하지 못했습니다",
@@ -247,12 +255,38 @@
       "tabVideo": "비디오",
       "tabAudio": "오디오",
       "tabEffects": "효과",
-      "adjustmentLayerHint": "조정 레이어의 효과는 위쪽 트랙의 모든 항목에 적용됩니다."
+      "adjustmentLayerHint": "조정 레이어의 효과는 위쪽 트랙의 모든 항목에 적용됩니다.",
+      "tabText": "텍스트",
+      "tabAnimation": "애니메이션",
+      "tabShape": "도형"
     },
     "gifSection": {
       "animation": "애니메이션",
       "speed": "속도",
       "resetSpeed": "1x로 재설정"
+    },
+    "lottieSection": {
+      "title": "Lottie",
+      "speed": "속도",
+      "resetSpeed": "1x로 재설정",
+      "reverse": "역재생",
+      "loop": "반복",
+      "pingpong": "핑퐁",
+      "trimIn": "시작 프레임",
+      "trimOut": "종료 프레임",
+      "text": "텍스트",
+      "colors": "색상",
+      "colorGroup": "도형 {{count}}개",
+      "resetColors": "모두 재설정",
+      "animation": "애니메이션",
+      "animationN": "애니메이션 {{index}}",
+      "theme": "테마",
+      "themeNone": "없음",
+      "marker": "마커",
+      "markerPlaceholder": "마커로 이동…",
+      "properties": "속성",
+      "resetProperties": "모두 재설정",
+      "otherColors": "기타 색상 ({{count}})"
     },
     "cornerPinSection": {
       "title": "코너 핀",

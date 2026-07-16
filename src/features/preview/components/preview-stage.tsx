@@ -17,6 +17,7 @@ import type { CompositionInputProps } from '@/types/export'
 import { usePlaybackStore } from '@/shared/state/playback'
 import { EDITOR_LAYOUT_CSS_VALUES } from '@/config/editor-layout'
 import { FAST_SCRUB_RENDERER_ENABLED } from '../utils/preview-constants'
+import { getPreviewDisplayCanvasStyle } from '../utils/preview-display-canvas'
 import { getPreviewPixelSnapOffset, ZERO_PIXEL_SNAP_OFFSET } from '../utils/preview-pixel-snap'
 import type { ColorGradeComparisonMode } from '../stores/gizmo-store'
 
@@ -30,6 +31,8 @@ interface PreviewStageProps {
   playerRenderSize: { width: number; height: number }
   totalFrames: number
   fps: number
+  /** Frame to start the player clock at on mount (preserves the playhead across remounts). */
+  initialFrame?: number
   isResolving: boolean
   isRenderedOverlayVisible: boolean
   isSplitGradeAfterVisible?: boolean
@@ -56,6 +59,7 @@ export const PreviewStage = memo(function PreviewStage({
   playerRenderSize,
   totalFrames,
   fps,
+  initialFrame = 0,
   isResolving,
   isRenderedOverlayVisible,
   isSplitGradeAfterVisible = false,
@@ -110,6 +114,9 @@ export const PreviewStage = memo(function PreviewStage({
     const ResizeObserverCtor = typeof ResizeObserver === 'undefined' ? null : ResizeObserver
     const resizeObserver = ResizeObserverCtor ? new ResizeObserverCtor(scheduleUpdate) : null
     resizeObserver?.observe(anchor)
+    if (anchor.parentElement) {
+      resizeObserver?.observe(anchor.parentElement)
+    }
     window.addEventListener('resize', scheduleUpdate)
 
     return () => {
@@ -130,6 +137,7 @@ export const PreviewStage = memo(function PreviewStage({
   const splitPosition = Math.max(0.05, Math.min(0.95, colorGradeSplitPosition))
   const splitPercent = splitPosition * 100
   const splitClipPath = `inset(0 ${100 - splitPercent}% 0 0)`
+  const displayCanvasStyle = getPreviewDisplayCanvasStyle(playerSize, playerRenderSize)
 
   const updateSplitPositionFromPointer = useCallback(
     (event: { clientX: number }) => {
@@ -240,6 +248,7 @@ export const PreviewStage = memo(function PreviewStage({
                 ref={playerRef}
                 durationInFrames={totalFrames}
                 fps={fps}
+                initialFrame={initialFrame}
                 width={playerRenderSize.width}
                 height={playerRenderSize.height}
                 autoPlay={false}
@@ -272,8 +281,7 @@ export const PreviewStage = memo(function PreviewStage({
                     ref={scrubCanvasRef}
                     className="absolute left-0 top-0 pointer-events-none"
                     style={{
-                      width: '100%',
-                      height: '100%',
+                      ...displayCanvasStyle,
                       maxWidth: 'none',
                       maxHeight: 'none',
                       visibility: isRenderedOverlayVisible ? 'visible' : 'hidden',
@@ -287,8 +295,7 @@ export const PreviewStage = memo(function PreviewStage({
                 className="absolute inset-0 pointer-events-none"
                 data-grade-comparison-after-layer={isSplitGradeAfterVisible ? 'true' : undefined}
                 style={{
-                  width: '100%',
-                  height: '100%',
+                  ...displayCanvasStyle,
                   zIndex: isSplitGradeAfterVisible ? 3 : 5,
                   visibility: isSplitGradeAfterVisible ? 'visible' : 'hidden',
                 }}

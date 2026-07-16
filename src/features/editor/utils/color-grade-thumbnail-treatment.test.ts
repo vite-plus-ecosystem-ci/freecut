@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+// @vitest-environment node
+
+import { describe, expect, it } from 'vite-plus/test'
 import type { ItemEffect } from '@/types/effects'
 import { resolveColorGradeThumbnailTreatment } from './color-grade-thumbnail-treatment'
 

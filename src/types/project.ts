@@ -4,6 +4,7 @@ import type { Transition } from './transition'
 import type { CropSettings } from './transform'
 import type { TextStylePresetId } from '@/shared/typography/text-style-preset-ids'
 import type { TextLayoutDrafts, TextSpan, TextStyleFields } from './text'
+import type { TextMotionSpec } from './text-motion'
 
 export interface Project {
   id: string
@@ -106,6 +107,8 @@ export interface ProjectTimeline {
       textStyleScale?: number
       textSpans?: TextSpan[]
       textLayoutDrafts?: TextLayoutDrafts
+      /** Per-character/word/line animation (see ./text-motion). */
+      textMotion?: TextMotionSpec
       shapeType?: 'rectangle' | 'circle' | 'triangle' | 'ellipse' | 'star' | 'polygon'
       fillColor?: string
       strokeColor?: string
@@ -208,6 +211,13 @@ export interface ProjectTimeline {
   }>
   // Transitions between clips
   transitions?: Transition[]
+  /**
+   * Ordered ids of sub-compositions promoted to standalone timeline tabs
+   * ("sequences"), shown alongside the implicit Main timeline. Order = tab
+   * order. Ids that don't resolve to an entry in `compositions` are pruned on
+   * load. Absent/empty means the project has only the Main timeline.
+   */
+  topLevelSequenceIds?: string[]
   // Sub-compositions (pre-comps)
   compositions?: Array<{
     id: string
@@ -222,6 +232,9 @@ export interface ProjectTimeline {
     durationInFrames: number
     backgroundColor?: string
     busAudioEq?: AudioEqSettings
+    markers?: ProjectTimeline['markers']
+    inPoint?: number
+    outPoint?: number
   }>
   // Keyframe animations
   keyframes?: Array<{

@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+// @vitest-environment node
+
+import { describe, expect, it } from 'vite-plus/test'
 import type { TimelineItem, VideoItem } from '@/types/timeline'
 import type { TranscriptToken } from './transcript-edit-model'
 import { buildTranscriptClipboardItems } from './transcript-clipboard'

@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 
 // Mock all external dependencies before importing the facade
@@ -97,6 +99,7 @@ vi.mock('@/shared/projects/migrations', () => ({
 
 // Import stores and facade after mocks
 import { useItemsStore } from './items-store'
+import { DEFAULT_TRACK_HEIGHT } from '../constants'
 import { useTransitionsStore } from './transitions-store'
 import { useKeyframesStore } from './keyframes-store'
 import { useMarkersStore } from './markers-store'
@@ -241,24 +244,23 @@ describe('TimelineStoreFacade', () => {
       expect(useItemsStore.getState().items).toEqual(items)
     })
 
-    it('maps tracks to items store', () => {
-      const tracks = [
-        {
-          id: 'track-1',
-          name: 'Track 1',
-          height: 80,
-          locked: false,
-          visible: true,
-          muted: false,
-          solo: false,
-          order: 0,
-          items: [],
-        },
-      ]
+    it('maps tracks to items store, resolving height from the track-size preset', () => {
+      const track = {
+        id: 'track-1',
+        name: 'Track 1',
+        height: 80,
+        locked: false,
+        visible: true,
+        muted: false,
+        solo: false,
+        order: 0,
+        items: [],
+      }
 
-      useTimelineStore.setState({ tracks })
+      useTimelineStore.setState({ tracks: [track] })
 
-      expect(useItemsStore.getState().tracks).toEqual(tracks)
+      // Height is a local view preference, so the stored 80 is discarded.
+      expect(useItemsStore.getState().tracks).toEqual([{ ...track, height: DEFAULT_TRACK_HEIGHT }])
     })
 
     it('maps fps to settings store', () => {
@@ -405,13 +407,6 @@ describe('TimelineStoreFacade', () => {
   })
 
   describe('temporal (undo/redo)', () => {
-    it('exposes undo/redo/clear through temporal', () => {
-      const temporal = useTimelineStore.temporal.getState()
-      expect(typeof temporal.undo).toBe('function')
-      expect(typeof temporal.redo).toBe('function')
-      expect(typeof temporal.clear).toBe('function')
-    })
-
     it('undos and redos audio volume updates through the facade', () => {
       useItemsStore.getState().setTracks([
         {
@@ -602,26 +597,6 @@ describe('TimelineStoreFacade', () => {
         durationInFrames: 120,
         speed: 1,
       })
-    })
-  })
-
-  describe('actions', () => {
-    it('exposes timeline actions', () => {
-      const state = useTimelineStore.getState()
-      expect(typeof state.addItem).toBe('function')
-      expect(typeof state.removeItems).toBe('function')
-      expect(typeof state.updateItem).toBe('function')
-      expect(typeof state.moveItem).toBe('function')
-      expect(typeof state.splitItem).toBe('function')
-      expect(typeof state.addTransition).toBe('function')
-      expect(typeof state.removeTransition).toBe('function')
-      expect(typeof state.addKeyframe).toBe('function')
-      expect(typeof state.removeKeyframe).toBe('function')
-      expect(typeof state.saveTimeline).toBe('function')
-      expect(typeof state.loadTimeline).toBe('function')
-      expect(typeof state.clearTimeline).toBe('function')
-      expect(typeof state.markDirty).toBe('function')
-      expect(typeof state.markClean).toBe('function')
     })
   })
 

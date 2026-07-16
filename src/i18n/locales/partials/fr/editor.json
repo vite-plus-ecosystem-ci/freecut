@@ -2,8 +2,7 @@
   "editor": {
     "miniTimeline": {
       "inPoint": "Point d'entrée",
-      "outPoint": "Point de sortie",
-      "markerAtFrame": "Marqueur à l'image {{frame}}"
+      "outPoint": "Point de sortie"
     },
     "animateTimeline": {
       "label": "Chronologie d'animation",
@@ -112,6 +111,9 @@
     },
     "localInferencePill": {
       "loading": "IA locale en chargement",
+      "downloading": "IA locale en téléchargement",
+      "loadingCache": "IA locale en chargement depuis le cache",
+      "preparing": "IA locale en préparation",
       "active": "IA locale active",
       "error": "Erreur d'IA locale",
       "ready": "IA locale prête",
@@ -227,9 +229,15 @@
       "frame": "Image",
       "time": "Temps",
       "label": "Étiquette",
-      "labelPlaceholder": "Saisir une étiquette...",
       "color": "Couleur",
       "deleteMarker": "Supprimer le marqueur"
+    },
+    "markerList": {
+      "title": "Marqueurs",
+      "empty": "Aucun marqueur",
+      "emptyHint": "Appuyez sur M pour ajouter un marqueur à la tête de lecture",
+      "clearAll": "Tout effacer",
+      "remove": "Supprimer le marqueur"
     },
     "canvasPanel": {
       "updateFailed": "Échec de la mise à jour des paramètres du canevas",
@@ -247,12 +255,38 @@
       "tabVideo": "Vidéo",
       "tabAudio": "Audio",
       "tabEffects": "Effets",
-      "adjustmentLayerHint": "Les effets sur les calques de réglage s'appliquent à tous les éléments des pistes situées au-dessus."
+      "adjustmentLayerHint": "Les effets sur les calques de réglage s'appliquent à tous les éléments des pistes situées au-dessus.",
+      "tabText": "Texte",
+      "tabAnimation": "Animation",
+      "tabShape": "Forme"
     },
     "gifSection": {
       "animation": "Animation",
       "speed": "Vitesse",
       "resetSpeed": "Réinitialiser à 1x"
+    },
+    "lottieSection": {
+      "title": "Lottie",
+      "speed": "Vitesse",
+      "resetSpeed": "Réinitialiser à 1x",
+      "reverse": "Inverser",
+      "loop": "Boucle",
+      "pingpong": "Ping-pong",
+      "trimIn": "Image de début",
+      "trimOut": "Image de fin",
+      "text": "Texte",
+      "colors": "Couleurs",
+      "colorGroup": "{{count}} formes",
+      "resetColors": "Tout réinitialiser",
+      "animation": "Animation",
+      "animationN": "Animation {{index}}",
+      "theme": "Thème",
+      "themeNone": "Aucun",
+      "marker": "Repère",
+      "markerPlaceholder": "Aller au repère…",
+      "properties": "Propriétés",
+      "resetProperties": "Tout réinitialiser",
+      "otherColors": "Autres couleurs ({{count}})"
     },
     "cornerPinSection": {
       "title": "Calage des coins",

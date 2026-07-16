@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+// @vitest-environment node
+
+import { describe, expect, it } from 'vite-plus/test'
 
 import { DEFAULT_BEZIER_POINTS, DEFAULT_SPRING_PARAMS } from '@/types/keyframe'
 import {
@@ -26,7 +28,10 @@ describe('buildEasingConfig', () => {
   })
 
   it('preserves an existing compatible cubic-bezier config', () => {
-    const existing = { type: 'cubic-bezier' as const, bezier: { x1: 0.1, y1: 0.2, x2: 0.3, y2: 0.4 } }
+    const existing = {
+      type: 'cubic-bezier' as const,
+      bezier: { x1: 0.1, y1: 0.2, x2: 0.3, y2: 0.4 },
+    }
     expect(buildEasingConfig('cubic-bezier', existing)?.bezier).toEqual(existing.bezier)
   })
 

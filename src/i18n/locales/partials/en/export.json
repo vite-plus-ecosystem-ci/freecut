@@ -84,8 +84,7 @@
       "selectFormat": "Select format",
       "selectQuality": "Select quality",
       "selectResolution": "Select resolution",
-      "video": "Video",
-      "subtitles": "Subtitles",
+      "sequence": "Sequence",
       "subtitleMode": {
         "off": "Off",
         "burn": "Burn in",
@@ -95,7 +94,9 @@
         "burnDescription": "Captions are drawn into the video — visible in every player.",
         "sidecarDescription": "Clean video plus a separate .srt subtitle file.",
         "embeddedDescription": "A soft, toggleable subtitle track (WebM/MKV)."
-      }
+      },
+      "subtitles": "Subtitles",
+      "video": "Video"
     },
     "videoContainer": {
       "mp4": "Widely supported, great for sharing",
@@ -137,6 +138,15 @@
         "video-codec-supported": {
           "title": "Video codec supported",
           "detail": "{{codec}} can be encoded as {{container}} in this browser."
+        },
+        "audio-codec-supported": {
+          "title": "Audio codec supported",
+          "detail": "{{codec}} audio can be encoded in {{container}} in this browser."
+        },
+        "audio-codec-unavailable": {
+          "title": "Audio codec unavailable",
+          "detail": "This browser cannot encode {{codec}} audio for {{container}}.",
+          "fix": "Choose WebM or MKV to use Opus audio, or update to a supported browser."
         },
         "worker-unavailable-fallback": {
           "title": "Worker export unavailable",
