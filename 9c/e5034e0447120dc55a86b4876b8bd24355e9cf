@@ -1,0 +1,137 @@
+.npmrc
+  s_7deb785b0d793a::t_8e6c9eccdd1acb 1-2
+package-lock.json
+  s_8c76a2b3e20f9b::t_3a7609bfe881de 79-80,91-93,112-114,136-138,345-347,419-421,439-441,463-465,479-480,514-516,559-561,1011-1013,1029-1031,1034,1038-1040,1043-1044,1048-1050,1053,1061-1063,1079-1081,1699-1701,1709-1711,1719-1721,1736-1738,1753-1755,1770-1772,1787-1789,1804-1806,1821-1823,1838-1840,1855-1857,1872-1874,1889-1891,1906-1908,1923-1925,1940-1942,1957-1959,1974-1976,1991-1993,2008-2010,2025-2027,2042-2044,2056-2058,2070-2072,2084-2086,2098-2100,2112-2114,2126-2128,2143-2145,2160-2162,2177-2179,2194-2196,2211-2213,2228-2230,2245-2247,2262-2264,2279-2281,2296-2298,2313-2315,2330-2332,2347-2349,2364-2366,2381-2383,2398-2400,2415-2417,2432-2434,2449-2451,2520-2522,4421-4423,5003-5005,5009-5014,5036,5095-5098,5100-5353,5357-5359,5374-5376,5391-5393,5408-5410,5425-5427,5442-5444,5459-5461,5476-5478,5499-5791,5793-5795,5822-5824,5828,5835-5837,5891-5893,5923-5925,5979-5981,5999-6002,6013-6015,6184-6186,6332-6334,6346-6348,6353,6360-6362,6366,6391-6393,6513-6515,6518,6623-6625,6874-6876,6922-6924,7416-7418,7523-7525,7555-7557,7574-7576,7603-7605,7611-7614,7660-7662,7678-7696,7712-7714,7727-7745,7748,7761-7763,7770-7775,7779-7781,7785,7888-7890,7908,7917-7919,7948-7950,8048,8265-8267,8274-8276,8330-8332,8397-8399,8490-8492,8504-8506,8536-8538,8581-8583,8614-8616,8620,8627-8629,8657-8659,8689-8691,8695,8708-8710,8857-8860,8864-8869,8872,8878,8884,8891-8893,8897-8899,8915-8917,8936-8944,8951-8953,8957-8958,8968-8971,8984-8991,9006-9009,9011-9017,9019-9054,9057-9063,9065-9069,9071,9074-9264,9461-9476,9478-9480,9534-9536,9562-9607
+package.json
+  s_7deb785b0d793a::t_f8df7eccb26b6b 116-117,121-123
+src/features/editor/agent/tools/mcp.test.ts
+  s_8c76a2b3e20f9b::t_94b1c6834ff9d4 1
+src/features/editor/utils/color-grade-thumbnail-treatment.test.ts
+  s_8c76a2b3e20f9b::t_fead8d8b8b1426 3
+src/features/keyframes/components/dopesheet-editor/easings-dev-presets.test.ts
+  s_8c76a2b3e20f9b::t_377b0d2b6c9480 3
+src/features/keyframes/components/dopesheet-editor/graph-visibility-storage.test.ts
+  s_8c76a2b3e20f9b::t_dc6e14f680c90d 1
+src/features/keyframes/components/dopesheet-editor/segment-spans.test.ts
+  s_8c76a2b3e20f9b::t_0a894c5b3470b2 3
+src/features/keyframes/utils/bake-motion.test.ts
+  s_0badcd35129243::t_a1c1c753b48a3c 3
+src/features/keyframes/utils/easing-presets.test.ts
+  s_0badcd35129243::t_9c6e6d1a220355 3
+src/features/keyframes/utils/motion-generator.test.ts
+  s_0badcd35129243::t_32d03aeace1fdf 3
+src/features/keyframes/utils/motion-modifier-eval.test.ts
+  s_0badcd35129243::t_b98d889d292b5a 3
+src/features/keyframes/utils/motion-presets.test.ts
+  s_0badcd35129243::t_027bbcbb70aeab 1
+src/features/keyframes/utils/procedural-preview.test.ts
+  s_0badcd35129243::t_635266c3d96136 3
+src/features/keyframes/utils/trigger-wave-motion-layer.test.ts
+  s_8c76a2b3e20f9b::t_410df57bbf08c3 1
+src/features/media-library/frame-interpolation-constants.test.ts
+  s_b97fe1ab1e5874::t_649ae48fd44aaf 3
+src/features/media-library/utils/audio-packet-timeline.test.ts
+  s_0ac33e64701c66::t_3eb64618d00931 3
+src/features/media-library/workers/render-support.test.ts
+  s_37601f7e5402cc::t_6f36866e770c66 3
+src/features/preview/components/power-window-overlay.test.ts
+  s_0badcd35129243::t_ab24480c25dda0 1
+src/features/preview/utils/preview-capture-frame.test.ts
+  s_0ac33e64701c66::t_b85f631e136068 3
+src/features/timeline/utils/source-range-intervals.test.ts
+  s_61e825252de171::t_8eaf77a8bd9f77 3
+src/features/timeline/utils/transcript-clipboard.test.ts
+  s_b97fe1ab1e5874::t_093ea539bfb847 3
+src/features/timeline/utils/transcript-edit-model.test.ts
+  s_b97fe1ab1e5874::t_4fee7ba7a35b7b 1
+src/features/timeline/utils/transcript-fuzzy.test.ts
+  s_0ac33e64701c66::t_12680f27889b10 3
+src/i18n/lazy-locales.test.ts
+  s_61e825252de171::t_151e495559b9c1 9
+src/infrastructure/interpolation/frame-tensor.test.ts
+  s_0badcd35129243::t_56b9e3edddd0b7 3
+src/infrastructure/interpolation/interpolate-gap.test.ts
+  s_0badcd35129243::t_b3af51bcc934ed 3
+src/infrastructure/interpolation/rife-interpolator.test.ts
+  s_0badcd35129243::t_e4ec0714821e0b 3
+src/infrastructure/upscale/upscale-size.test.ts
+  s_0ac33e64701c66::t_8c06268a79da50 3
+src/runtime/composition-runtime/components/hooks/use-visual-freeze-frame.test.ts
+  s_8c76a2b3e20f9b::t_8130a9650cd77e 1
+src/shared/timeline/io-range/io-range-geometry.test.ts
+  s_0ac33e64701c66::t_ae5b3f8b65afc7 3
+src/shared/timeline/marker-names.test.ts
+  s_0ac33e64701c66::t_33358008b1aa25 3
+src/shared/timeline/timeline-annotations.test.ts
+  s_0ac33e64701c66::t_b7d37f7c6feef4 3
+src/shared/utils/planar-rgb.test.ts
+  s_0ac33e64701c66::t_0070ccbe18174f 3
+src/shared/utils/render-progress.test.ts
+  s_0ac33e64701c66::t_3ac56e1b3f9138 3
+src/shared/utils/time-utils.test.ts
+  s_0ac33e64701c66::t_49cd025755cd80 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "9ce5034e0447120dc55a86b4876b8bd24355e9cf",
+  "prompts": {},
+  "sessions": {
+    "s_0ac33e64701c66": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_075d29060ffezQSiOhstWcng5h",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "wan9chi <dk4rest@gmail.com>"
+    },
+    "s_0badcd35129243": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_075d2906effeFKmSj2JpEGI4cD",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "wan9chi <dk4rest@gmail.com>"
+    },
+    "s_37601f7e5402cc": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_075d290fdffeXiYxJ0jrfpaLFG",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "wan9chi <dk4rest@gmail.com>"
+    },
+    "s_61e825252de171": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_075d2910cffec5F5nSxiexsTBV",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "wan9chi <dk4rest@gmail.com>"
+    },
+    "s_7deb785b0d793a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_075d290f7ffe9T0uOzapI0RUOM",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "wan9chi <dk4rest@gmail.com>"
+    },
+    "s_8c76a2b3e20f9b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_075d29074ffeAbsyHCaPe6VLBC",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "wan9chi <dk4rest@gmail.com>"
+    },
+    "s_b97fe1ab1e5874": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_075d290f1ffe502H7K9poEoQXv",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "wan9chi <dk4rest@gmail.com>"
+    }
+  }
+}
