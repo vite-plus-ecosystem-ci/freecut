@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+// @vitest-environment node
+
+import { describe, expect, it } from 'vite-plus/test'
 import type { ResolvedTransform } from '@/types/transform'
 import type { AudioPulseModulation } from '@/types/effects'
 import type { MotionModifier } from '@/types/motion'

@@ -2,8 +2,7 @@
   "editor": {
     "miniTimeline": {
       "inPoint": "Giriş noktası",
-      "outPoint": "Çıkış noktası",
-      "markerAtFrame": "{{frame}} karesindeki işaretçi"
+      "outPoint": "Çıkış noktası"
     },
     "animateTimeline": {
       "label": "Animasyon zaman çizelgesi",
@@ -112,6 +111,9 @@
     },
     "localInferencePill": {
       "loading": "Yerel YZ Yükleniyor",
+      "downloading": "Yerel YZ İndiriliyor",
+      "loadingCache": "Yerel YZ Önbellekten Yükleniyor",
+      "preparing": "Yerel YZ Hazırlanıyor",
       "active": "Yerel YZ Etkin",
       "error": "Yerel YZ Hatası",
       "ready": "Yerel YZ Hazır",
@@ -227,9 +229,15 @@
       "frame": "Kare",
       "time": "Zaman",
       "label": "Etiket",
-      "labelPlaceholder": "Etiket girin...",
       "color": "Renk",
       "deleteMarker": "İşaretçiyi Sil"
+    },
+    "markerList": {
+      "title": "İşaretçiler",
+      "empty": "İşaretçi yok",
+      "emptyHint": "Oynatma başlığına işaretçi eklemek için M tuşuna basın",
+      "clearAll": "Tümünü temizle",
+      "remove": "İşaretçiyi kaldır"
     },
     "canvasPanel": {
       "updateFailed": "Tuval ayarları güncellenemedi",
@@ -247,12 +255,38 @@
       "tabVideo": "Video",
       "tabAudio": "Ses",
       "tabEffects": "Efektler",
-      "adjustmentLayerHint": "Ayar katmanlarındaki efektler, üst izlerdeki tüm öğelere uygulanır."
+      "adjustmentLayerHint": "Ayar katmanlarındaki efektler, üst izlerdeki tüm öğelere uygulanır.",
+      "tabText": "Metin",
+      "tabAnimation": "Animasyon",
+      "tabShape": "Şekil"
     },
     "gifSection": {
       "animation": "Animasyon",
       "speed": "Hız",
       "resetSpeed": "1x'e sıfırla"
+    },
+    "lottieSection": {
+      "title": "Lottie",
+      "speed": "Hız",
+      "resetSpeed": "1x'e sıfırla",
+      "reverse": "Ters",
+      "loop": "Döngü",
+      "pingpong": "Ping-pong",
+      "trimIn": "Başlangıç karesi",
+      "trimOut": "Bitiş karesi",
+      "text": "Metin",
+      "colors": "Renkler",
+      "colorGroup": "{{count}} şekil",
+      "resetColors": "Tümünü sıfırla",
+      "animation": "Animasyon",
+      "animationN": "Animasyon {{index}}",
+      "theme": "Tema",
+      "themeNone": "Yok",
+      "marker": "İşaretçi",
+      "markerPlaceholder": "İşaretçiye git…",
+      "properties": "Özellikler",
+      "resetProperties": "Tümünü sıfırla",
+      "otherColors": "Diğer renkler ({{count}})"
     },
     "cornerPinSection": {
       "title": "Köşe Sabitleme",

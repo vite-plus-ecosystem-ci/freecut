@@ -21,7 +21,6 @@ import {
 } from '@/features/timeline/deps/media-transcription-service'
 import { useTimelineStore } from '../../stores/timeline-store'
 import { useItemsStore } from '../../stores/items-store'
-import { useCompositionNavigationStore } from '../../stores/composition-navigation-store'
 import {
   insertFreezeFrame,
   linkItems,
@@ -29,7 +28,11 @@ import {
   splitItemAtFrames,
   unlinkItems,
 } from '../../stores/actions/item-actions'
-import { createPreComp, dissolvePreComp } from '../../stores/actions/composition-actions'
+import {
+  createPreComp,
+  dissolvePreComp,
+  openComposition,
+} from '../../stores/actions/composition-actions'
 import {
   type TimelineItemOverlay,
   useTimelineItemOverlayStore,
@@ -47,11 +50,6 @@ import { resolveMediaUrl } from '../../deps/media-library-resolver'
 import { useBentoLayoutDialogStore } from '../bento-layout-dialog-store'
 import { createLogger } from '@/shared/logging/logger'
 import { saveScenes } from '@/infrastructure/storage/workspace-fs/scenes'
-import {
-  analyzeSilenceForItems,
-  applySilencePreviewOverlays,
-  DEFAULT_SILENCE_REMOVAL_SETTINGS,
-} from '../../utils/silence-removal-preview'
 import {
   analyzeFillerWordsForItems,
   applyFillerPreviewOverlays,
@@ -328,7 +326,7 @@ export function useTimelineItemActions({
       return
     }
 
-    useCompositionNavigationStore.getState().enterComposition(compositionId, itemLabel, item.id)
+    openComposition(compositionId, itemLabel, item.id)
   }, [isCompositionItem, compositionId, itemLabel, item.id])
 
   const handleDissolveComposition = useCallback(() => {
@@ -340,7 +338,6 @@ export function useTimelineItemActions({
   }, [isCompositionItem, item.id])
 
   const sceneDetectionAbortRef = useRef<AbortController | null>(null)
-  const [isRemovingSilence, setIsRemovingSilence] = useState(false)
   const [isRemovingFillers, setIsRemovingFillers] = useState(false)
 
   useEffect(() => {
@@ -512,40 +509,9 @@ export function useTimelineItemActions({
       return
     }
 
-    const run = async () => {
-      setIsRemovingSilence(true)
-      try {
-        const targetItemIds = targetItems.map((target) => target.id)
-        const silenceRangesByMediaId = await analyzeSilenceForItems(
-          targetItemIds,
-          DEFAULT_SILENCE_REMOVAL_SETTINGS,
-        )
-        const summary = applySilencePreviewOverlays(targetItemIds, silenceRangesByMediaId)
-
-        if (summary.rangeCount === 0) {
-          toast.info(i18n.t('timeline.silenceRemoval.noRemovableDetectedShort'))
-          return
-        }
-
-        useSilenceRemovalDialogStore.getState().open({
-          itemIds: targetItemIds,
-          settings: DEFAULT_SILENCE_REMOVAL_SETTINGS,
-          rangesByMediaId: silenceRangesByMediaId,
-          summary,
-        })
-      } catch (error) {
-        logger.warn('Remove silence failed', error)
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : i18n.t('timeline.silenceRemoval.toastPreviewFailed'),
-        )
-      } finally {
-        setIsRemovingSilence(false)
-      }
-    }
-
-    void run()
+    useSilenceRemovalDialogStore.getState().open({
+      itemIds: targetItems.map((target) => target.id),
+    })
   }, [item.id])
 
   const handleRemoveFillers = useCallback(() => {
@@ -607,7 +573,6 @@ export function useTimelineItemActions({
     getCanUnlinkSelected,
     hasSpeakableText,
     isSceneDetectionActive,
-    isRemovingSilence,
     isRemovingFillers,
     isCompositionItem,
     handleJoinSelected,

@@ -4,6 +4,7 @@ import type { MotionModifier } from './motion'
 import type { BlendMode } from './blend-modes'
 import type { AudioEqSettings } from './audio'
 import type { TextStylePresetId } from '@/shared/typography/text-style-preset-ids'
+import type { TextMotionSpec } from './text-motion'
 import type { TextLayoutDrafts, TextSpan, TextStyleFields } from './text'
 
 export interface TimelineItemCornerPin {
@@ -185,6 +186,8 @@ export type TextItem = BaseTimelineItem &
     textLayoutDrafts?: TextLayoutDrafts
     textStylePresetId?: TextStylePresetId
     textStyleScale?: number
+    /** Per-character/word/line animation (see src/types/text-motion.ts). */
+    textMotion?: TextMotionSpec
     textRole?: 'caption'
     captionSource?: GeneratedCaptionSource
     color: string // Text color (hex or oklch)
@@ -197,6 +200,63 @@ export type ImageItem = BaseTimelineItem & {
   // Source dimensions (intrinsic size from media metadata)
   sourceWidth?: number
   sourceHeight?: number
+}
+
+export type LottieItem = BaseTimelineItem & {
+  type: 'lottie'
+  src: string // blob URL to the Lottie JSON
+  thumbnailUrl?: string
+  // Source dimensions (intrinsic size from the animation's w/h)
+  sourceWidth?: number
+  sourceHeight?: number
+  // Animation timing (from the Lottie's fr / op-ip), for timeline<->lottie frame mapping
+  frameRate: number
+  totalFrames: number
+  // Loop the animation when the clip outlives one playthrough (default true)
+  loop?: boolean
+  // --- Editing controls (all optional; consumed by mapTimelineFrameToLottieFrame) ---
+  // `speed` and `isReversed` are inherited from BaseTimelineItem but note: Lottie
+  // uses a dedicated `reversed` flag so it never triggers video reverse-conform.
+  /** Play the animation backward. */
+  reversed?: boolean
+  /** How the animation repeats while looping (default 'loop'). */
+  loopMode?: 'loop' | 'pingpong'
+  /** First source frame of the animation to play (default 0). */
+  segmentStart?: number
+  /** Last source frame of the animation to play (default totalFrames - 1). */
+  segmentEnd?: number
+  /**
+   * Selected animation id for a multi-animation `.lottie` archive (default: the
+   * manifest's primary animation). Switching this re-derives the clip's
+   * timing/size from the chosen animation.
+   */
+  animationId?: string
+  /**
+   * Selected dotLottie theme id — a named rule set (from the `.lottie` manifest)
+   * recoloring/retexting the animation's slots, applied via `setThemeData`.
+   * Undefined renders the animation as authored.
+   */
+  themeId?: string
+  /**
+   * Per-layer text replacements for template Lotties, keyed by the text layer's
+   * stable key (see `extractLottieTextLayers`). Applied before render to both
+   * raw `.json` and `.lottie` archives (images inlined).
+   */
+  textOverrides?: Record<string, string>
+  /**
+   * Per-color solid fill/stroke replacements for template Lotties, keyed by the
+   * color's stable ordinal key (see `extractLottieColorLayers`) with `#rrggbb`
+   * hex values. Applied before render to both raw `.json` and `.lottie`
+   * archives. Animated colors freeze to the chosen color; gradients are
+   * recolored via themes/slots, not here.
+   */
+  colorOverrides?: Record<string, string>
+  /**
+   * Scalar/vector value-slot overrides keyed by slot id (see
+   * `extractLottieValueSlots`): a number for a scalar slot, `[x, y]` for a
+   * vector slot. Applied natively via dotlottie's slot setters after load.
+   */
+  slotOverrides?: Record<string, number | [number, number]>
 }
 
 export type ShapeType =
@@ -316,6 +376,7 @@ export type TimelineItem =
   | AudioItem
   | TextItem
   | ImageItem
+  | LottieItem
   | ShapeItem
   | AdjustmentItem
   | CompositionItem
@@ -346,6 +407,10 @@ export interface TimelineTrack {
 export interface ProjectMarker {
   id: string
   frame: number
+  /**
+   * Usually empty — every surface falls back to an ordinal name via
+   * `shared/timeline/marker-names`.
+   */
   label?: string
   color: string
 }

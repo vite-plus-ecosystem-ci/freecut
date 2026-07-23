@@ -2,8 +2,7 @@
   "editor": {
     "miniTimeline": {
       "inPoint": "In-Punkt",
-      "outPoint": "Out-Punkt",
-      "markerAtFrame": "Marker bei Frame {{frame}}"
+      "outPoint": "Out-Punkt"
     },
     "animateTimeline": {
       "label": "Animations-Zeitleiste",
@@ -112,6 +111,9 @@
     },
     "localInferencePill": {
       "loading": "Lokale KI wird geladen",
+      "downloading": "Lokale KI wird heruntergeladen",
+      "loadingCache": "Lokale KI wird aus dem Cache geladen",
+      "preparing": "Lokale KI wird vorbereitet",
       "active": "Lokale KI aktiv",
       "error": "Fehler der lokalen KI",
       "ready": "Lokale KI bereit",
@@ -227,9 +229,15 @@
       "frame": "Frame",
       "time": "Zeit",
       "label": "Bezeichnung",
-      "labelPlaceholder": "Bezeichnung eingeben...",
       "color": "Farbe",
       "deleteMarker": "Marker löschen"
+    },
+    "markerList": {
+      "title": "Marker",
+      "empty": "Keine Marker",
+      "emptyHint": "Drücke M, um am Abspielkopf einen Marker hinzuzufügen",
+      "clearAll": "Alle löschen",
+      "remove": "Marker entfernen"
     },
     "canvasPanel": {
       "updateFailed": "Canvas-Einstellungen konnten nicht aktualisiert werden",
@@ -247,12 +255,38 @@
       "tabVideo": "Video",
       "tabAudio": "Audio",
       "tabEffects": "Effekte",
-      "adjustmentLayerHint": "Effekte auf Einstellungsebenen gelten für alle Elemente auf Spuren darüber."
+      "adjustmentLayerHint": "Effekte auf Einstellungsebenen gelten für alle Elemente auf Spuren darüber.",
+      "tabText": "Text",
+      "tabAnimation": "Animation",
+      "tabShape": "Form"
     },
     "gifSection": {
       "animation": "Animation",
       "speed": "Geschwindigkeit",
       "resetSpeed": "Auf 1x zurücksetzen"
+    },
+    "lottieSection": {
+      "title": "Lottie",
+      "speed": "Geschwindigkeit",
+      "resetSpeed": "Auf 1x zurücksetzen",
+      "reverse": "Rückwärts",
+      "loop": "Schleife",
+      "pingpong": "Ping-Pong",
+      "trimIn": "Startbild",
+      "trimOut": "Endbild",
+      "text": "Text",
+      "colors": "Farben",
+      "colorGroup": "{{count}} Formen",
+      "resetColors": "Alle zurücksetzen",
+      "animation": "Animation",
+      "animationN": "Animation {{index}}",
+      "theme": "Thema",
+      "themeNone": "Keine",
+      "marker": "Marker",
+      "markerPlaceholder": "Zu Marker springen…",
+      "properties": "Eigenschaften",
+      "resetProperties": "Alle zurücksetzen",
+      "otherColors": "Weitere Farben ({{count}})"
     },
     "cornerPinSection": {
       "title": "Eckpunkt-Verzerrung",

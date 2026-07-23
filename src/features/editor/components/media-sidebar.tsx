@@ -19,6 +19,7 @@ import {
   Blend,
   Pen,
   Captions,
+  Sticker,
   WandSparkles,
 } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
@@ -36,12 +37,12 @@ import {
   setMediaDragData,
 } from '@/features/editor/deps/media-library'
 import { KeyframeGraphPanel, TranscriptEditorPanel } from '@/features/editor/deps/timeline-contract'
+import { LottieBrowserPanel } from '@/features/editor/deps/lottie-browser'
 import { TransitionsPanel } from './transitions-panel'
 import {
   createDefaultShapeItem,
+  createOverlayLayerTrack,
   createTextTemplateItem,
-  findCompatibleTrackForItemType,
-  findNearestAvailableSpace,
   getDefaultGeneratedLayerDurationInFrames,
 } from '@/features/editor/deps/timeline-utils'
 import { addAdjustmentLayer } from '../utils/add-adjustment-layer'
@@ -293,8 +294,12 @@ export const MediaSidebar = memo(function MediaSidebar() {
   const prefersReducedMotion = useReducedMotion()
 
   const [aiTabActivated, setAiTabActivated] = useState(activeTab === 'ai')
+  // The Lottie panel hits an external API on mount, so keep it unmounted until
+  // the tab is first opened; it then stays mounted (state preserved).
+  const [lottieTabActivated, setLottieTabActivated] = useState(activeTab === 'lottie')
   useEffect(() => {
     if (activeTab === 'ai') setAiTabActivated(true)
+    if (activeTab === 'lottie') setLottieTabActivated(true)
   }, [activeTab])
 
   // The collapsed panel stays mounted (clipped to 0 width, see NOTE below), so
@@ -387,33 +392,23 @@ export const MediaSidebar = memo(function MediaSidebar() {
   // These change frequently and would cause re-renders cascading to MediaLibrary/MediaCards
   // Read from store directly in callbacks using getState()
 
-  // Add text item to timeline at the best available position
+  // Add text item on its own new layer at the playhead, matching what dragging
+  // the same preset onto the canvas does (minus the cursor-driven position).
   const handleAddText = useCallback(
     (presetId?: (typeof TEXT_STYLE_PRESETS)[number]['id']) => {
       // Read all needed state from stores directly to avoid subscriptions
-      const { tracks, items, fps, addItem } = useTimelineStore.getState()
-      const { activeTrackId, selectItems } = useSelectionStore.getState()
+      const { tracks, fps, addItemOnNewTrack } = useTimelineStore.getState()
+      const { activeTrackId, selectItems, setActiveTrack } = useSelectionStore.getState()
       const currentProject = useProjectStore.getState().currentProject
 
-      const targetTrack = findCompatibleTrackForItemType({
-        tracks,
-        items,
-        itemType: 'text',
-        preferredTrackId: activeTrackId,
-      })
+      const newTrack = createOverlayLayerTrack({ tracks, activeTrackId })
 
-      if (!targetTrack) {
+      if (!newTrack) {
         logger.warn('No available track for text item')
         return
       }
 
       const durationInFrames = getDefaultGeneratedLayerDurationInFrames(fps)
-
-      // Find the best position: start at playhead, find nearest available space
-      const proposedPosition = usePlaybackStore.getState().currentFrame
-      const finalPosition =
-        findNearestAvailableSpace(proposedPosition, durationInFrames, targetTrack.id, items) ??
-        proposedPosition // Fallback to proposed if no space found
 
       // Get canvas dimensions for initial transform
       const canvasWidth = currentProject?.metadata.width ?? DEFAULT_PROJECT_WIDTH
@@ -424,8 +419,8 @@ export const MediaSidebar = memo(function MediaSidebar() {
         : undefined
       const textItem: TextItem = createTextTemplateItem({
         placement: {
-          trackId: targetTrack.id,
-          from: finalPosition,
+          trackId: newTrack.trackId,
+          from: Math.max(0, usePlaybackStore.getState().currentFrame),
           durationInFrames,
           canvasWidth,
           canvasHeight,
@@ -436,54 +431,41 @@ export const MediaSidebar = memo(function MediaSidebar() {
         textStylePresetId: presetId,
       })
 
-      addItem(textItem)
-      // Select the new item
+      addItemOnNewTrack(textItem, newTrack.tracks)
+      setActiveTrack(newTrack.trackId)
       selectItems([textItem.id])
     },
     [t],
   )
 
-  // Add shape item to timeline at the best available position
+  // Add shape item on its own new layer at the playhead, matching the canvas drop.
   const handleAddShape = useCallback((shapeType: ShapeType) => {
     // Read all needed state from stores directly to avoid subscriptions
-    const { tracks, items, fps, addItem } = useTimelineStore.getState()
-    const { activeTrackId, selectItems } = useSelectionStore.getState()
+    const { tracks, fps, addItemOnNewTrack } = useTimelineStore.getState()
+    const { activeTrackId, selectItems, setActiveTrack } = useSelectionStore.getState()
     const currentProject = useProjectStore.getState().currentProject
 
-    const targetTrack = findCompatibleTrackForItemType({
-      tracks,
-      items,
-      itemType: 'shape',
-      preferredTrackId: activeTrackId,
-    })
+    const newTrack = createOverlayLayerTrack({ tracks, activeTrackId })
 
-    if (!targetTrack) {
+    if (!newTrack) {
       logger.warn('No available track for shape item')
       return
     }
-
-    const durationInFrames = getDefaultGeneratedLayerDurationInFrames(fps)
-
-    // Find the best position: start at playhead, find nearest available space
-    const proposedPosition = usePlaybackStore.getState().currentFrame
-    const finalPosition =
-      findNearestAvailableSpace(proposedPosition, durationInFrames, targetTrack.id, items) ??
-      proposedPosition
 
     const canvasWidth = currentProject?.metadata.width ?? DEFAULT_PROJECT_WIDTH
     const canvasHeight = currentProject?.metadata.height ?? DEFAULT_PROJECT_HEIGHT
 
     const shapeItem: ShapeItem = createDefaultShapeItem({
-      trackId: targetTrack.id,
-      from: finalPosition,
-      durationInFrames,
+      trackId: newTrack.trackId,
+      from: Math.max(0, usePlaybackStore.getState().currentFrame),
+      durationInFrames: getDefaultGeneratedLayerDurationInFrames(fps),
       canvasWidth,
       canvasHeight,
       shapeType,
     })
 
-    addItem(shapeItem)
-    // Select the new item
+    addItemOnNewTrack(shapeItem, newTrack.tracks)
+    setActiveTrack(newTrack.trackId)
     selectItems([shapeItem.id])
   }, [])
 
@@ -558,6 +540,7 @@ export const MediaSidebar = memo(function MediaSidebar() {
     { id: 'shapes' as const, icon: Pentagon, label: t('editor.mediaSidebar.shapes') },
     { id: 'effects' as const, icon: Layers, label: t('editor.mediaSidebar.effects') },
     { id: 'transitions' as const, icon: Blend, label: t('editor.mediaSidebar.transitions') },
+    { id: 'lottie' as const, icon: Sticker, label: t('lottieBrowser.tabLabel') },
     { id: 'transcript' as const, icon: Captions, label: t('transcript.tabLabel') },
     { id: 'ai' as const, icon: WandSparkles, label: t('editor.mediaSidebar.ai') },
   ]
@@ -1159,6 +1142,13 @@ export const MediaSidebar = memo(function MediaSidebar() {
                 className={`min-h-0 flex-1 overflow-hidden ${activeTab === 'transitions' ? 'block' : 'hidden'}`}
               >
                 <TransitionsPanel />
+              </div>
+
+              {/* Lottie Browser Tab */}
+              <div
+                className={`min-h-0 flex-1 overflow-hidden ${activeTab === 'lottie' ? 'block' : 'hidden'}`}
+              >
+                {lottieTabActivated && <LottieBrowserPanel />}
               </div>
 
               {/* Transcript Tab */}

@@ -18,9 +18,15 @@ import type {
   TimelineItem,
   VideoItem,
   ImageItem,
+  LottieItem,
   ShapeItem,
   CompositionItem,
 } from '@/types/timeline'
+import {
+  LottieExportProvider,
+  isRenderableLottieSrc,
+} from '@/infrastructure/lottie/lottie-frame-provider'
+import { resolveLottieRenderSpec } from '@/infrastructure/lottie/lottie-text'
 import type { ItemKeyframes } from '@/types/keyframe'
 import type { ItemEffect } from '@/types/effects'
 import type { ResolvedTransform } from '@/types/transform'
@@ -165,6 +171,27 @@ function recordScrubPerf(frame: number, path: ScrubPerfSample['path'], startMs: 
   } catch {
     /* User Timing unavailable — ignore */
   }
+}
+
+/**
+ * Identity of a Lottie item's animation/theme selection + text/color overrides.
+ * When this changes the preloaded dotlottie renderer must be rebuilt with a
+ * fresh render spec (see the preview freshness sync in `renderFrame`).
+ */
+function lottieOverrideSignature(item: {
+  animationId?: string
+  themeId?: string
+  textOverrides?: Record<string, string>
+  colorOverrides?: Record<string, string>
+  slotOverrides?: Record<string, number | [number, number]>
+}): string {
+  return JSON.stringify({
+    a: item.animationId ?? null,
+    m: item.themeId ?? null,
+    t: item.textOverrides ?? null,
+    c: item.colorOverrides ?? null,
+    s: item.slotOverrides ?? null,
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -391,8 +418,54 @@ export async function createCompositionRenderer(
   const webpItems: ImageItem[] = []
   const gifFramesMap = new Map<string, CachedGifFrames>()
 
+  // Lottie animations: rendered on demand via dotlottie-web (no frame pre-extraction).
+  const lottieItems: LottieItem[] = []
+  const lottieProvider = new LottieExportProvider()
+
+  // Preview only: a persistent renderer outlives edits, so when a top-level
+  // Lottie's text/color overrides change we must rebuild its dotlottie renderer
+  // with freshly patched data (the frame mapping already reads live timing).
+  // Cheap when nothing changed (a signature compare); export never calls this
+  // (it preloads final overrides once). Sub-comp Lotties are out of scope.
+  const liveLottieItem = (baseItem: LottieItem): LottieItem => {
+    const live = getLiveItemSnapshot?.(baseItem.id)
+    return live && live.type === 'lottie' ? live : baseItem
+  }
+  const lottieOverridesAreStale = (): boolean =>
+    lottieItems.some(
+      (baseItem) =>
+        lottieProvider.getSignature(baseItem.id) !==
+        lottieOverrideSignature(liveLottieItem(baseItem)),
+    )
+  const ensureLottieOverridesFresh = async (): Promise<void> => {
+    await Promise.all(
+      lottieItems.map(async (baseItem) => {
+        const item = liveLottieItem(baseItem)
+        if (!isRenderableLottieSrc(item.src)) return
+        const signature = lottieOverrideSignature(item)
+        if (lottieProvider.getSignature(baseItem.id) === signature) return
+        const w = item.sourceWidth && item.sourceWidth > 0 ? item.sourceWidth : 512
+        const h = item.sourceHeight && item.sourceHeight > 0 ? item.sourceHeight : 512
+        const spec = await resolveLottieRenderSpec(item.src, item)
+        await lottieProvider.rebuild(
+          baseItem.id,
+          item.src,
+          w,
+          h,
+          spec.data ?? undefined,
+          signature,
+          spec.themeData ?? undefined,
+          spec.slots ?? undefined,
+        )
+      }),
+    )
+  }
+
   for (const track of tracks) {
     for (const item of track.items ?? []) {
+      if (item.type === 'lottie' && isRenderableLottieSrc((item as LottieItem).src)) {
+        lottieItems.push(item as LottieItem)
+      }
       if (item.type === 'image' && (item as ImageItem).src) {
         const imageItem = item as ImageItem
 
@@ -552,6 +625,7 @@ export async function createCompositionRenderer(
     reverseVideoFrameCache,
     imageElements,
     gifFramesMap,
+    lottieProvider,
     keyframesMap,
     adjustmentLayers,
     getPreviewEffectsOverride,
@@ -767,10 +841,15 @@ export async function createCompositionRenderer(
     ) {
       // Composition items require the compositions store which only exists on main thread.
       // Workers get a fresh, empty Zustand store, so sub-comp data can never be resolved.
-      // Bail early to trigger the main-thread fallback path.
-      const hasCompositionItems = tracks.some((t) =>
-        (t.items ?? []).some((i) => i.type === 'composition'),
-      )
+      // Bail early to trigger the main-thread fallback path. Use reachability rather than a
+      // narrow `type === 'composition'` scan so sub-comps referenced only through a linked-audio
+      // wrapper item are caught too — otherwise nested Lottie/GIF/WebP (invisible to the
+      // top-level media lists) would slip past into the sub-comp preload and export blank.
+      const hasCompositionItems =
+        collectReachableCompositionIdsFromTracks(
+          tracks,
+          useCompositionsStore.getState().compositionById,
+        ).length > 0
       if (!hasDom && hasCompositionItems) {
         throw new Error('WORKER_REQUIRES_MAIN_THREAD:composition')
       }
@@ -795,6 +874,10 @@ export async function createCompositionRenderer(
 
       if (!hasDom && (gifItems.length > 0 || webpItems.length > 0)) {
         throw new Error('WORKER_REQUIRES_MAIN_THREAD:animated-image')
+      }
+
+      if (!hasDom && lottieItems.length > 0) {
+        throw new Error('WORKER_REQUIRES_MAIN_THREAD:lottie')
       }
 
       // === Initialize mediabunny video extractors (primary method) ===
@@ -907,6 +990,44 @@ export async function createCompositionRenderer(
         getLog().debug('All GIF frames loaded', { loadedCount: gifFramesMap.size })
       }
 
+      // Preload Lottie renderers (main thread only). Each renders into its own
+      // OffscreenCanvas at native animation resolution; frames are drawn on demand.
+      if (hasDom && lottieItems.length > 0) {
+        getLog().debug('Preloading Lottie animations', { lottieCount: lottieItems.length })
+        await Promise.all(
+          lottieItems.map(async (lottieItem) => {
+            try {
+              const w =
+                lottieItem.sourceWidth && lottieItem.sourceWidth > 0 ? lottieItem.sourceWidth : 512
+              const h =
+                lottieItem.sourceHeight && lottieItem.sourceHeight > 0
+                  ? lottieItem.sourceHeight
+                  : 512
+              // Resolve animation/theme + text/color edits before warming so
+              // exports reflect them.
+              const spec = await resolveLottieRenderSpec(lottieItem.src, lottieItem)
+              if (isDisposed) return
+              await lottieProvider.preload(
+                lottieItem.id,
+                lottieItem.src,
+                w,
+                h,
+                spec.data ?? undefined,
+                lottieOverrideSignature(lottieItem),
+                spec.themeData ?? undefined,
+                spec.slots ?? undefined,
+              )
+              // Bail if the engine was disposed mid-load so we don't register a
+              // renderer into a torn-down provider (dispose() → destroy()).
+              if (isDisposed) return
+            } catch (err) {
+              getLog().error('Failed to preload Lottie', { itemId: lottieItem.id, error: err })
+            }
+          }),
+        )
+        getLog().debug('All Lottie animations loaded')
+      }
+
       // Load animated WebP frames via cache service (main thread only)
       if (hasDom && webpItems.length > 0) {
         getLog().debug('Preloading animated WebP frames', { webpCount: webpItems.length })
@@ -992,7 +1113,8 @@ export async function createCompositionRenderer(
         }
 
         for (const subItem of subComp.items) {
-          if (subItem.type !== 'video' && subItem.type !== 'image') continue
+          if (subItem.type !== 'video' && subItem.type !== 'image' && subItem.type !== 'lottie')
+            continue
           if (subItem.mediaId) {
             const src = blobUrlManager.get(subItem.mediaId)
             if (src) {
@@ -1001,7 +1123,7 @@ export async function createCompositionRenderer(
               pendingResolutions.push({ subItem, mediaId: subItem.mediaId })
             }
           } else {
-            const src = (subItem as VideoItem | ImageItem).src ?? ''
+            const src = (subItem as VideoItem | ImageItem | LottieItem).src ?? ''
             if (src) subCompMediaItems.push({ subItem, src })
           }
         }
@@ -1120,8 +1242,37 @@ export async function createCompositionRenderer(
         const subImagePromises: Promise<void>[] = []
         const subGifItems: ImageItem[] = []
         const subWebpItems: ImageItem[] = []
+        const subLottieItems: Array<{
+          id: string
+          src: string
+          w: number
+          h: number
+          animationId?: string
+          themeId?: string
+          textOverrides?: Record<string, string>
+          colorOverrides?: Record<string, string>
+          slotOverrides?: Record<string, number | [number, number]>
+        }> = []
 
         for (const { subItem, src } of subCompMediaItems) {
+          if (subItem.type === 'lottie' && !lottieProvider.get(subItem.id)) {
+            const lottieItem = subItem as LottieItem
+            subLottieItems.push({
+              id: lottieItem.id,
+              src,
+              w:
+                lottieItem.sourceWidth && lottieItem.sourceWidth > 0 ? lottieItem.sourceWidth : 512,
+              h:
+                lottieItem.sourceHeight && lottieItem.sourceHeight > 0
+                  ? lottieItem.sourceHeight
+                  : 512,
+              animationId: lottieItem.animationId,
+              themeId: lottieItem.themeId,
+              textOverrides: lottieItem.textOverrides,
+              colorOverrides: lottieItem.colorOverrides,
+              slotOverrides: lottieItem.slotOverrides,
+            })
+          }
           if (subItem.type === 'image' && !imageElements.has(subItem.id)) {
             const imageItem = subItem as ImageItem
             const itemWithSrc = { ...imageItem, src } as ImageItem
@@ -1221,11 +1372,39 @@ export async function createCompositionRenderer(
           await Promise.all(subWebpPromises)
         }
 
+        // Preload sub-comp Lottie renderers, applying animation/theme + text/
+        // color edits so compound-clip Lotties reflect them on export (parity
+        // with preview).
+        if (hasDom && subLottieItems.length > 0) {
+          await Promise.all(
+            subLottieItems.map(async (it) => {
+              try {
+                if (!isRenderableLottieSrc(it.src)) return
+                const spec = await resolveLottieRenderSpec(it.src, it)
+                if (isDisposed) return
+                await lottieProvider.preload(
+                  it.id,
+                  it.src,
+                  it.w,
+                  it.h,
+                  spec.data ?? undefined,
+                  lottieOverrideSignature(it),
+                  spec.themeData ?? undefined,
+                  spec.slots ?? undefined,
+                )
+              } catch (err) {
+                getLog().error('Failed to preload sub-comp Lottie', { itemId: it.id, error: err })
+              }
+            }),
+          )
+        }
+
         getLog().debug('Sub-composition media loaded', {
           videos: subCompMediaItems.filter((s) => s.subItem.type === 'video').length,
           images: subCompMediaItems.filter((s) => s.subItem.type === 'image').length,
           gifs: subGifItems.length,
           webps: subWebpItems.length,
+          lotties: subLottieItems.length,
         })
       }
 
@@ -1254,6 +1433,13 @@ export async function createCompositionRenderer(
       // refresh, effects added after renderer creation stay invisible.
       if (renderMode === 'preview') {
         refreshSubCompRenderData(useCompositionsStore.getState().compositionById)
+      }
+
+      // Rebuild any Lottie whose text/color overrides changed since preload, so
+      // live recolor/text edits show up. The sync guard keeps this ~free on the
+      // hot path — the await only runs the frame after an override edit.
+      if (renderMode === 'preview' && lottieItems.length > 0 && lottieOverridesAreStale()) {
+        await ensureLottieOverridesFresh()
       }
 
       // Clear canvas
@@ -1963,6 +2149,7 @@ export async function createCompositionRenderer(
       }
       imageElements.clear()
       gifFramesMap.clear() // Clear GIF frame references (actual frames are managed by gifFrameCache)
+      lottieProvider.destroy() // Tear down dotlottie WASM instances
       subCompRenderData.clear() // Release sub-composition render data references
       subCompRenderDataSource.clear()
       prewarmCtx = null

@@ -2,8 +2,7 @@
   "editor": {
     "miniTimeline": {
       "inPoint": "Punto de entrada",
-      "outPoint": "Punto de salida",
-      "markerAtFrame": "Marcador en el fotograma {{frame}}"
+      "outPoint": "Punto de salida"
     },
     "animateTimeline": {
       "label": "Línea de tiempo de animación",
@@ -112,6 +111,9 @@
     },
     "localInferencePill": {
       "loading": "IA local cargando",
+      "downloading": "IA local descargando",
+      "loadingCache": "IA local cargando desde caché",
+      "preparing": "IA local preparando",
       "active": "IA local activa",
       "error": "Error de IA local",
       "ready": "IA local lista",
@@ -227,9 +229,15 @@
       "frame": "Fotograma",
       "time": "Tiempo",
       "label": "Etiqueta",
-      "labelPlaceholder": "Introduce una etiqueta...",
       "color": "Color",
       "deleteMarker": "Eliminar marcador"
+    },
+    "markerList": {
+      "title": "Marcadores",
+      "empty": "Sin marcadores",
+      "emptyHint": "Pulsa M para añadir un marcador en el cabezal",
+      "clearAll": "Borrar todo",
+      "remove": "Eliminar marcador"
     },
     "canvasPanel": {
       "updateFailed": "Error al actualizar la configuración del lienzo",
@@ -247,12 +255,38 @@
       "tabVideo": "Vídeo",
       "tabAudio": "Audio",
       "tabEffects": "Efectos",
-      "adjustmentLayerHint": "Los efectos en capas de ajuste se aplican a todos los elementos de las pistas superiores."
+      "adjustmentLayerHint": "Los efectos en capas de ajuste se aplican a todos los elementos de las pistas superiores.",
+      "tabText": "Texto",
+      "tabAnimation": "Animación",
+      "tabShape": "Forma"
     },
     "gifSection": {
       "animation": "Animación",
       "speed": "Velocidad",
       "resetSpeed": "Restablecer a 1x"
+    },
+    "lottieSection": {
+      "title": "Lottie",
+      "speed": "Velocidad",
+      "resetSpeed": "Restablecer a 1x",
+      "reverse": "Invertir",
+      "loop": "Bucle",
+      "pingpong": "Ping-pong",
+      "trimIn": "Fotograma inicial",
+      "trimOut": "Fotograma final",
+      "text": "Texto",
+      "colors": "Colores",
+      "colorGroup": "{{count}} formas",
+      "resetColors": "Restablecer todo",
+      "animation": "Animación",
+      "animationN": "Animación {{index}}",
+      "theme": "Tema",
+      "themeNone": "Ninguno",
+      "marker": "Marcador",
+      "markerPlaceholder": "Ir al marcador…",
+      "properties": "Propiedades",
+      "resetProperties": "Restablecer todo",
+      "otherColors": "Otros colores ({{count}})"
     },
     "cornerPinSection": {
       "title": "Corrección de esquinas",

@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import { beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import type { MediaTranscript } from '@/types/storage'
 
@@ -70,7 +72,7 @@ describe('runMediaTranscriptionJob', () => {
     ])
     expect(storeState.setTranscriptProgress.mock.calls).toEqual([
       ['media-1', { stage: 'queued', progress: 0 }],
-      ['media-1', { stage: 'loading', progress: 0 }],
+      ['media-1', { stage: 'downloading', progress: 0 }],
       ['media-1', { stage: 'decoding', progress: 0.42 }],
     ])
     expect(storeState.clearTranscriptProgress).toHaveBeenCalledWith('media-1')

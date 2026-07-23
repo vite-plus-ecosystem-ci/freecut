@@ -47,6 +47,7 @@
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
     "@huggingface/transformers": "4.1.0",
+    "@lottiefiles/dotlottie-web": "0.76.0",
     "@mediabunny/aac-encoder": "1.50.3",
     "@mediabunny/ac3": "1.50.3",
     "@mediabunny/mp3-encoder": "1.50.3",
@@ -106,16 +107,20 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.1",
-    "@vitest/coverage-v8": "4.1.4",
+    "@vitest/coverage-v8": "4.1.10",
     "@webgpu/types": "0.1.69",
     "jsdom": "27.4.0",
-    "playwright": "^1.60.0",
+    "playwright": "1.60.0",
     "tailwindcss": "4.2.2",
-    "typescript": "5.9.3",
-    "vite-plus": "0.1.24"
+    "typescript": "7.0.2",
+    "vite-plus": "0.0.0-commit.57939439ddcb16d9f54ebf7d41432893182ee46d",
+    "vitest": "4.1.10"
   },
   "overrides": {
-    "esbuild": "0.28.1"
+    "esbuild": "0.28.1",
+    "typescript": "7.0.2",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.0.0-commit.57939439ddcb16d9f54ebf7d41432893182ee46d",
+    "vitest": "4.1.10"
   },
   "packageManager": "npm@11.8.0"
 }

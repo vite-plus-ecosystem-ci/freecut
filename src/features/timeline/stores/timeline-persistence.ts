@@ -16,6 +16,7 @@ import {
   getAdjacentTrackOrder,
   getTrackKind,
 } from '../utils/classic-tracks'
+import { loadTrackHeightOverrides } from '../utils/track-heights'
 import { timelineToSourceFrames } from '../utils/source-calculations'
 import { useZoomStore } from './zoom-store'
 import { useItemsStore } from './items-store'
@@ -26,6 +27,7 @@ import { useTimelineSettingsStore } from './timeline-settings-store'
 import { useTimelineCommandStore } from './timeline-command-store'
 import { useCompositionsStore } from './compositions-store'
 import { useCompositionNavigationStore } from './composition-navigation-store'
+import { useSequencesStore } from './sequences-store'
 import { getProject, updateProject, saveProjectThumbnail } from '@/infrastructure/storage'
 import {
   importCanvasRenderOrchestrator,
@@ -115,14 +117,39 @@ function cloneTransitionForProject(transition: Transition): Transition {
   }
 }
 
-function stripTimelineItemThumbnailUrl<T extends { thumbnailUrl?: string }>(item: T): T {
-  if (item.thumbnailUrl === undefined) {
-    return item
+/**
+ * Strip ephemeral (never-persist) fields from a timeline item:
+ *  - `thumbnailUrl` — a transient object URL for the clip thumbnail.
+ *  - `src` / `audioSrc` when they are `blob:` URLs on a media-backed item.
+ *    Blob URLs are session-scoped: persisting one bakes a dead URL into the
+ *    project file that fails to `fetch()` on the next load (the recurring
+ *    `net::ERR_FILE_NOT_FOUND` from dotlottie/video). Media-backed items
+ *    re-resolve their src from `mediaId` on load, so the stored value is
+ *    redundant anyway — drop it.
+ *
+ * Returns the SAME reference when nothing changed so callers can detect a
+ * mutation by identity.
+ */
+function stripTimelineItemEphemeralFields<
+  T extends { thumbnailUrl?: string; mediaId?: string; src?: string; audioSrc?: string },
+>(item: T): T {
+  let next = item
+
+  if (next.thumbnailUrl !== undefined) {
+    const rest = { ...next }
+    delete rest.thumbnailUrl
+    next = rest as T
   }
 
-  const rest = { ...item }
-  delete rest.thumbnailUrl
-  return rest as T
+  if (next.mediaId && typeof next.src === 'string' && next.src.startsWith('blob:')) {
+    next = { ...next, src: '' }
+  }
+
+  if (next.mediaId && typeof next.audioSrc === 'string' && next.audioSrc.startsWith('blob:')) {
+    next = { ...next, audioSrc: '' }
+  }
+
+  return next
 }
 
 function sanitizeTimelineEphemeralFields(timeline: ProjectTimeline): {
@@ -132,25 +159,23 @@ function sanitizeTimelineEphemeralFields(timeline: ProjectTimeline): {
   let cleaned = false
 
   const items = (timeline.items ?? []).map((item) => {
-    if (item.thumbnailUrl === undefined) {
-      return item
+    const stripped = stripTimelineItemEphemeralFields(item)
+    if (stripped !== item) {
+      cleaned = true
     }
-
-    cleaned = true
-    return stripTimelineItemThumbnailUrl(item)
+    return stripped
   }) as ProjectTimeline['items']
 
   const compositions = timeline.compositions?.map((composition) => {
     let compositionCleaned = false
 
     const nextItems = (composition.items ?? []).map((item) => {
-      if (item.thumbnailUrl === undefined) {
-        return item
+      const stripped = stripTimelineItemEphemeralFields(item)
+      if (stripped !== item) {
+        cleaned = true
+        compositionCleaned = true
       }
-
-      cleaned = true
-      compositionCleaned = true
-      return stripTimelineItemThumbnailUrl(item)
+      return stripped
     }) as ProjectTimeline['items']
 
     if (!compositionCleaned) {
@@ -748,8 +773,20 @@ export function buildTimelineFromStores(): ProjectTimeline {
           durationInFrames: c.durationInFrames,
           ...(c.backgroundColor && { backgroundColor: c.backgroundColor }),
           ...(c.busAudioEq && { busAudioEq: c.busAudioEq }),
+          ...(c.markers?.length && { markers: c.markers as ProjectTimeline['markers'] }),
+          ...(c.inPoint != null && { inPoint: c.inPoint }),
+          ...(c.outPoint != null && { outPoint: c.outPoint }),
         })),
       }
+    })(),
+    // Standalone timeline tabs (multi-timeline) — keep only ids that resolve to
+    // an existing composition so tabs never dangle.
+    ...(() => {
+      const compIds = new Set(useCompositionsStore.getState().compositions.map((c) => c.id))
+      const topLevelSequenceIds = useSequencesStore
+        .getState()
+        .topLevelSequenceIds.filter((id) => compIds.has(id))
+      return topLevelSequenceIds.length > 0 ? { topLevelSequenceIds } : {}
     })(),
   }
 
@@ -761,26 +798,35 @@ export async function saveTimeline(projectId: string): Promise<void> {
   const event = logger.startEvent('saveTimeline', opId)
   event.set('projectId', projectId)
 
-  // If currently editing a sub-composition, navigate back to root to save
-  // the main timeline data, then restore the full breadcrumb path after save completes.
+  // Serialization reads Main from the live stores, so if the user is on a
+  // sequence tab (or drilled into a compound clip) we reset to Main to build the
+  // project, then restore their tab + drill-in path afterwards. The tab root
+  // (breadcrumbs[0]) is restored via switchToSequence; deeper levels via enter.
   const navStore = useCompositionNavigationStore.getState()
-  const previousBreadcrumbs = navStore.breadcrumbs
-    .filter((breadcrumb) => breadcrumb.compositionId !== null)
-    .map((breadcrumb) => ({
-      compositionId: breadcrumb.compositionId!,
-      label: breadcrumb.label,
-      entryItemId: breadcrumb.entryItemId,
-    }))
-  if (previousBreadcrumbs.length > 0) {
+  const restoreTabId = navStore.breadcrumbs[0]?.compositionId ?? null
+  const drillPath = navStore.breadcrumbs.slice(1).map((breadcrumb) => ({
+    compositionId: breadcrumb.compositionId!,
+    label: breadcrumb.label,
+    entryItemId: breadcrumb.entryItemId,
+  }))
+  const needsRestore = restoreTabId !== null || drillPath.length > 0
+  // Preserve the playhead within the active tab: the reset + re-enter below would
+  // otherwise jump it on every autosave.
+  const savedCurrentFrame = usePlaybackStore.getState().currentFrame
+  if (needsRestore) {
     navStore.resetToRoot()
   }
 
   const restoreCompositionPath = () => {
-    for (const breadcrumb of previousBreadcrumbs) {
+    if (restoreTabId !== null) {
+      useCompositionNavigationStore.getState().switchToSequence(restoreTabId)
+    }
+    for (const breadcrumb of drillPath) {
       useCompositionNavigationStore
         .getState()
         .enterComposition(breadcrumb.compositionId, breadcrumb.label, breadcrumb.entryItemId)
     }
+    usePlaybackStore.getState().setCurrentFrame(savedCurrentFrame)
   }
 
   // Read directly from domain stores (for the event log + thumbnail; the
@@ -789,6 +835,15 @@ export async function saveTimeline(projectId: string): Promise<void> {
   const transitionsState = useTransitionsStore.getState()
   const keyframesState = useKeyframesStore.getState()
   const currentFrame = usePlaybackStore.getState().currentFrame
+
+  // Build the (Main-rooted) timeline and restore the user's tab/drill context
+  // NOW, before any await — keeping the temporary swap to Main synchronous so
+  // autosave never visibly parks the editor on Main across the async storage +
+  // thumbnail work below.
+  const sanitizedTimeline = buildTimelineFromStores()
+  if (needsRestore) {
+    restoreCompositionPath()
+  }
 
   event.merge({
     itemCount: itemsState.items.length,
@@ -809,8 +864,6 @@ export async function saveTimeline(projectId: string): Promise<void> {
       width: project.metadata?.width,
       height: project.metadata?.height,
     })
-
-    const sanitizedTimeline = buildTimelineFromStores()
 
     // Generate thumbnail — prefer capturing the existing preview canvas
     // (near-free: reuses the already-initialized scrub renderer with cached
@@ -894,30 +947,25 @@ export async function saveTimeline(projectId: string): Promise<void> {
       }
     }
 
-    // Update project
-    // Clear deprecated thumbnail field when using thumbnailId to save space
+    // Persist as a PARTIAL update: updateProject re-reads project.json right
+    // before writing and merges only these fields, so a concurrent rename /
+    // description / metadata / root-folder edit that lands during the async
+    // thumbnail work above is preserved. Writing a full record from the
+    // pre-await `project` snapshot would clobber those newer fields.
+    // Clear the deprecated inline thumbnail field when using thumbnailId.
+    const updatedAt = Date.now()
     await updateProject(projectId, {
       timeline: sanitizedTimeline,
       ...(thumbnailId && { thumbnailId, thumbnail: undefined }),
-      updatedAt: Date.now(),
+      updatedAt,
     })
 
     // Mark as clean after successful save
     useTimelineSettingsStore.getState().markClean()
 
-    const updatedAt = Date.now()
     event.success({ updatedAt, thumbnailId })
-
-    // Re-enter the sub-composition the user was editing before save
-    if (previousBreadcrumbs.length > 0) {
-      restoreCompositionPath()
-    }
   } catch (error) {
     event.failure(error)
-    // Re-enter even on failure so user doesn't lose their editing context
-    if (previousBreadcrumbs.length > 0) {
-      restoreCompositionPath()
-    }
     throw error
   }
 }
@@ -944,6 +992,11 @@ export async function saveTimeline(projectId: string): Promise<void> {
  * migrating from storage; it then runs media validation on top.
  */
 export async function hydrateTimelineStoresFromProject(project: Project): Promise<void> {
+  // Swap in this project's saved track heights before any setTracks call, since
+  // that is what resolves each track's height. Heights are a local view
+  // preference and never come out of the project file.
+  loadTrackHeightOverrides(project.id)
+
   if (project.timeline && project.timeline.tracks?.length > 0) {
     const t = project.timeline
 
@@ -1002,12 +1055,27 @@ export async function hydrateTimelineStoresFromProject(project: Project): Promis
           durationInFrames: c.durationInFrames,
           ...(c.backgroundColor && { backgroundColor: c.backgroundColor }),
           ...(c.busAudioEq && { busAudioEq: c.busAudioEq }),
+          markers: c.markers ?? [],
+          inPoint: c.inPoint ?? null,
+          outPoint: c.outPoint ?? null,
         })),
       )
       useCompositionsStore.getState().setCompositions(hydratedCompositions)
     } else {
       useCompositionsStore.getState().setCompositions([])
     }
+
+    // Restore standalone timeline tabs (multi-timeline). Filter to ids that
+    // resolve to a hydrated composition so tabs never dangle.
+    const hydratedCompositionIds = new Set(
+      useCompositionsStore.getState().compositions.map((c) => c.id),
+    )
+    useSequencesStore.getState().reset()
+    useSequencesStore
+      .getState()
+      .setTopLevelSequenceIds(
+        (t.topLevelSequenceIds ?? []).filter((id) => hydratedCompositionIds.has(id)),
+      )
 
     // Reset composition navigation to root on load
     useCompositionNavigationStore.getState().resetToRoot()
@@ -1027,7 +1095,7 @@ export async function hydrateTimelineStoresFromProject(project: Project): Promis
     logger.debug('hydrateTimelineStoresFromProject: initializing new project with default track')
 
     // Initialize with default tracks for new projects
-    useItemsStore.getState().setTracks(createDefaultClassicTracks(DEFAULT_TRACK_HEIGHT))
+    useItemsStore.getState().setTracks(createDefaultClassicTracks())
     useItemsStore.getState().setItems([])
     useTransitionsStore.getState().setTransitions([])
     useKeyframesStore.getState().setKeyframes([])
@@ -1035,6 +1103,7 @@ export async function hydrateTimelineStoresFromProject(project: Project): Promis
     useMarkersStore.getState().setInPoint(null)
     useMarkersStore.getState().setOutPoint(null)
     useCompositionsStore.getState().setCompositions([])
+    useSequencesStore.getState().reset()
     useCompositionNavigationStore.getState().resetToRoot()
     useTimelineSettingsStore.getState().setScrollPosition(0)
     useZoomStore.getState().setZoomLevel(1)

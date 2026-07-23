@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest'
+// @vitest-environment node
+
+import { describe, expect, it } from 'vite-plus/test'
 import type { ResolvedTransform } from '@/types/transform'
 import type { MotionModifier } from '@/types/motion'
 import { DEFAULT_MOTION_GENERATOR_SETTINGS } from './motion-generator'

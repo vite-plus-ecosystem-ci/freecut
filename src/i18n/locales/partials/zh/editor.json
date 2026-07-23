@@ -2,8 +2,7 @@
   "editor": {
     "miniTimeline": {
       "inPoint": "入点",
-      "outPoint": "出点",
-      "markerAtFrame": "第 {{frame}} 帧的标记"
+      "outPoint": "出点"
     },
     "animateTimeline": {
       "label": "动画时间线",
@@ -112,6 +111,9 @@
     },
     "localInferencePill": {
       "loading": "本地 AI 加载中",
+      "downloading": "本地 AI 下载中",
+      "loadingCache": "本地 AI 从缓存加载中",
+      "preparing": "本地 AI 准备中",
       "active": "本地 AI 运行中",
       "error": "本地 AI 错误",
       "ready": "本地 AI 就绪",
@@ -227,9 +229,15 @@
       "frame": "帧",
       "time": "时间",
       "label": "标签",
-      "labelPlaceholder": "输入标签...",
       "color": "颜色",
       "deleteMarker": "删除标记"
+    },
+    "markerList": {
+      "title": "标记",
+      "empty": "暂无标记",
+      "emptyHint": "按 M 在播放头处添加标记",
+      "clearAll": "全部清除",
+      "remove": "移除标记"
     },
     "canvasPanel": {
       "updateFailed": "更新画布设置失败",
@@ -247,12 +255,38 @@
       "tabVideo": "视频",
       "tabAudio": "音频",
       "tabEffects": "效果",
-      "adjustmentLayerHint": "调整图层上的效果会应用到上方所有轨道的项目。"
+      "adjustmentLayerHint": "调整图层上的效果会应用到上方所有轨道的项目。",
+      "tabText": "文本",
+      "tabAnimation": "动画",
+      "tabShape": "形状"
     },
     "gifSection": {
       "animation": "动画",
       "speed": "速度",
       "resetSpeed": "重置为 1x"
+    },
+    "lottieSection": {
+      "title": "Lottie",
+      "speed": "速度",
+      "resetSpeed": "重置为 1x",
+      "reverse": "反向",
+      "loop": "循环",
+      "pingpong": "乒乓",
+      "trimIn": "起始帧",
+      "trimOut": "结束帧",
+      "text": "文本",
+      "colors": "颜色",
+      "colorGroup": "{{count}} 个形状",
+      "resetColors": "全部重置",
+      "animation": "动画",
+      "animationN": "动画 {{index}}",
+      "theme": "主题",
+      "themeNone": "无",
+      "marker": "标记",
+      "markerPlaceholder": "跳转到标记…",
+      "properties": "属性",
+      "resetProperties": "全部重置",
+      "otherColors": "其他颜色 ({{count}})"
     },
     "cornerPinSection": {
       "title": "边角定位",
