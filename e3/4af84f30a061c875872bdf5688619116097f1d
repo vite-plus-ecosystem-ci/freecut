@@ -1,0 +1,21 @@
+package-lock.json
+  s_6b3979e089ed9f::t_7229b9ebe633ef 79,439-441,463-465,480,514-516,5003-5005,5357-5359,5374-5376,5391-5393,5408-5410,5425-5427,5442-5444,5459-5461,5476-5478,5923-5925,6718-6720,8858-8860,8951-8953,8968,8984-8991
+package.json
+  s_6b3979e089ed9f::t_41c38045394f3c 116,122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e34af84f30a061c875872bdf5688619116097f1d",
+  "prompts": {},
+  "sessions": {
+    "s_6b3979e089ed9f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_073404a17ffeb07g2srFl2SgaX",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "wan9chi <dk4rest@gmail.com>"
+    }
+  }
+}
