@@ -1,0 +1,127 @@
+.npmrc
+  s_fdbdae8c09ca7c::t_88494027a01a0a 1-2
+package-lock.json
+  s_fdbdae8c09ca7c::t_015cc8c778ea63 79-80,91-93,112-114,136-138,209-211,215-216,329-331,335,345-347,369-371,376,378,380,388-390,419-421,439-441,463-465,479-480,514-516,559-561,1011-1013,1029-1031,1034,1038-1040,1043-1044,1048-1050,1053,1061-1063,1079-1081,1699-1701,1709-1711,1719-1721,1736-1738,1753-1755,1770-1772,1787-1789,1804-1806,1821-1823,1838-1840,1855-1857,1872-1874,1889-1891,1906-1908,1923-1925,1940-1942,1957-1959,1974-1976,1991-1993,2008-2010,2025-2027,2042-2044,2056-2058,2070-2072,2084-2086,2098-2100,2112-2114,2126-2128,2143-2145,2160-2162,2177-2179,2194-2196,2211-2213,2228-2230,2245-2247,2262-2264,2279-2281,2296-2298,2313-2315,2330-2332,2347-2349,2364-2366,2381-2383,2398-2400,2415-2417,2432-2434,2449-2451,2520-2522,4382-4384,4421-4423,5003-5005,5009-5014,5020-5027,5033,5044,5103-5106,5108-5114,5116-5361,5365-5367,5382-5384,5399-5401,5416-5418,5433-5435,5450-5452,5467-5469,5484-5486,5507-5513,5515-5518,5520-5526,5528-5806,5809-5822,5827-5836,5843-5845,5899-5901,5931-5933,5987-5989,6007-6011,6021-6023,6192-6194,6340-6342,6354-6356,6361,6368-6370,6374,6399-6401,6521-6523,6526,6631-6633,6726-6728,6882-6884,6930-6932,7396-7398,7402-7403,7424-7426,7531-7533,7563-7565,7582-7584,7611-7613,7619-7622,7668-7670,7686-7704,7720-7722,7735-7753,7756,7769-7771,7778-7783,7787-7789,7793,7896-7898,7916,7925-7927,7956-7958,8056,8273-8275,8282-8284,8338-8340,8405-8407,8498-8500,8512-8514,8544-8546,8589-8591,8612-8614,8622-8624,8628,8635-8637,8665-8667,8697-8699,8703,8782-8784,8865-8868,8872-8877,8880,8883-8890,8894,8896,8900,8907-8909,8913-8915,8931-8933,8952-8960,8967-8969,8973-8974,8984-8987,9000-9007,9022-9025,9027-9033,9035-9070,9073-9079,9081-9085,9087,9090-9280,9477-9492,9494-9496,9550-9552,9578-9623
+package.json
+  s_fdbdae8c09ca7c::t_a4c37bfc07d2e3 124-125,129-131
+src/app/vite-preload-recovery.test.ts
+  s_fdbdae8c09ca7c::t_5e3b3f1a209028 1
+src/features/docs/docs-content.test.ts
+  s_fdbdae8c09ca7c::t_b308195e74a211 1
+src/features/editor/agent/tools/mcp.test.ts
+  s_fdbdae8c09ca7c::t_2eeeb8a1758f7b 1
+src/features/editor/utils/color-grade-thumbnail-treatment.test.ts
+  s_fdbdae8c09ca7c::t_dc19fa5a46d3f0 3
+src/features/keyframes/components/dopesheet-editor/dopesheet-live-pixel-geometry.test.ts
+  s_fdbdae8c09ca7c::t_5d7fbba88d2c81 1
+src/features/keyframes/components/dopesheet-editor/easings-dev-presets.test.ts
+  s_fdbdae8c09ca7c::t_f176ce02494490 3
+src/features/keyframes/components/dopesheet-editor/graph-visibility-storage.test.ts
+  s_fdbdae8c09ca7c::t_abc5ce6639a7fb 1
+src/features/keyframes/components/dopesheet-editor/segment-spans.test.ts
+  s_fdbdae8c09ca7c::t_7576af8ccc9885 3
+src/features/keyframes/utils/bake-motion.test.ts
+  s_fdbdae8c09ca7c::t_b4069bf504ee54 3
+src/features/keyframes/utils/easing-presets.test.ts
+  s_fdbdae8c09ca7c::t_0c64f1722f458c 3
+src/features/keyframes/utils/motion-generator.test.ts
+  s_fdbdae8c09ca7c::t_c654ff2523dbb9 3
+src/features/keyframes/utils/motion-modifier-eval.test.ts
+  s_fdbdae8c09ca7c::t_e488eaca0625d2 3
+src/features/keyframes/utils/motion-presets.test.ts
+  s_fdbdae8c09ca7c::t_056f0cec1319b4 1
+src/features/keyframes/utils/procedural-preview.test.ts
+  s_fdbdae8c09ca7c::t_09a83c4ecf060c 3
+src/features/keyframes/utils/trigger-wave-motion-layer.test.ts
+  s_fdbdae8c09ca7c::t_b78d57ef5e94ff 1
+src/features/media-library/frame-interpolation-constants.test.ts
+  s_fdbdae8c09ca7c::t_27f8cc519802ee 3
+src/features/media-library/transcription/lib/whisper-runtime-options.test.ts
+  s_fdbdae8c09ca7c::t_bb3c5a414d2446 1,6
+src/features/media-library/transcription/lib/whisper-word-timings.test.ts
+  s_fdbdae8c09ca7c::t_b12f59520898ca 1
+src/features/media-library/utils/audio-packet-timeline.test.ts
+  s_fdbdae8c09ca7c::t_a0b63890d7efde 3
+src/features/media-library/workers/render-support.test.ts
+  s_fdbdae8c09ca7c::t_40309c2ee66747 3
+src/features/preview/components/power-window-overlay.test.ts
+  s_fdbdae8c09ca7c::t_93749b1cc27e0a 1
+src/features/preview/components/selectable-item.test.tsx
+  s_fdbdae8c09ca7c::t_65f81d05f18b1a 2
+src/features/preview/stores/gizmo-store.interaction.test.ts
+  s_fdbdae8c09ca7c::t_6564a4a30c6267 1,81
+src/features/preview/stores/use-item-gizmo-preview.test.tsx
+  s_fdbdae8c09ca7c::t_3f5607cd636016 2,28,53
+src/features/preview/utils/crop-gizmo.test.ts
+  s_fdbdae8c09ca7c::t_5178e68a2b6c49 1
+src/features/preview/utils/dom-text-scrub-overlay.test.ts
+  s_fdbdae8c09ca7c::t_1c8df9e7c8c157 3
+src/features/preview/utils/gizmo-preview-presentation.test.ts
+  s_fdbdae8c09ca7c::t_253bd4d95cb965 1
+src/features/preview/utils/gizmo-transform-interaction.test.ts
+  s_fdbdae8c09ca7c::t_72fe2f46a699da 1,82
+src/features/preview/utils/position-link-ownership.test.ts
+  s_fdbdae8c09ca7c::t_de3776688a6665 1
+src/features/preview/utils/preview-capture-frame.test.ts
+  s_fdbdae8c09ca7c::t_0f39282bb08088 3
+src/features/timeline/components/edit-keyframe-panel-model.test.ts
+  s_fdbdae8c09ca7c::t_a658a251f0c669 1
+src/features/timeline/components/timeline-settled-content-zoom-provider.test.tsx
+  s_fdbdae8c09ca7c::t_c51ba162ec56ba 3
+src/features/timeline/utils/fit-filmstrip-frame-size.test.ts
+  s_fdbdae8c09ca7c::t_840e1a656d2b5f 1
+src/features/timeline/utils/source-range-intervals.test.ts
+  s_fdbdae8c09ca7c::t_0b62001b2afaaf 3
+src/features/timeline/utils/transcript-clipboard.test.ts
+  s_fdbdae8c09ca7c::t_b60e66497c0239 3
+src/features/timeline/utils/transcript-edit-model.test.ts
+  s_fdbdae8c09ca7c::t_efec285daef82b 1
+src/features/timeline/utils/transcript-fuzzy.test.ts
+  s_fdbdae8c09ca7c::t_72a482367b05db 3
+src/i18n/lazy-locales.test.ts
+  s_fdbdae8c09ca7c::t_017c33273e4fd1 9
+src/infrastructure/gpu-effects/effects/blur.test.ts
+  s_fdbdae8c09ca7c::t_f55b83c552e470 3,17
+src/infrastructure/interpolation/frame-tensor.test.ts
+  s_fdbdae8c09ca7c::t_e9a0da8254e828 3
+src/infrastructure/interpolation/interpolate-gap.test.ts
+  s_fdbdae8c09ca7c::t_0734901303bac2 3
+src/infrastructure/interpolation/rife-interpolator.test.ts
+  s_fdbdae8c09ca7c::t_1888cd426c8cdf 3
+src/infrastructure/upscale/upscale-size.test.ts
+  s_fdbdae8c09ca7c::t_1c67fb3a7fd223 3
+src/runtime/composition-runtime/components/hooks/use-visual-freeze-frame.test.ts
+  s_fdbdae8c09ca7c::t_ee05ea75ea498d 1
+src/runtime/composition-runtime/utils/gizmo-dom-translation.test.ts
+  s_fdbdae8c09ca7c::t_f80a94bef03be1 1
+src/shared/timeline/io-range/io-range-geometry.test.ts
+  s_fdbdae8c09ca7c::t_122276435bbd21 3
+src/shared/timeline/marker-names.test.ts
+  s_fdbdae8c09ca7c::t_c3851376d38806 3
+src/shared/timeline/timeline-annotations.test.ts
+  s_fdbdae8c09ca7c::t_c03acc917a283e 3
+src/shared/utils/planar-rgb.test.ts
+  s_fdbdae8c09ca7c::t_ec1c219e15a067 3
+src/shared/utils/render-progress.test.ts
+  s_fdbdae8c09ca7c::t_f6789b9f03e717 3
+src/shared/utils/time-utils.test.ts
+  s_fdbdae8c09ca7c::t_a835388fb23bd1 3
+src/shared/utils/transcript-text.test.ts
+  s_fdbdae8c09ca7c::t_34c7c3ea095ae6 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "78893ae45d39952edfe2eb04028136ddaf42ff1b",
+  "prompts": {},
+  "sessions": {
+    "s_fdbdae8c09ca7c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1202c2a1-3a3c-4672-9642-5e437556b1a7",
+        "model": "claude-opus-5"
+      },
+      "human_author": "MK <fengmk2@gmail.com>"
+    }
+  }
+}
