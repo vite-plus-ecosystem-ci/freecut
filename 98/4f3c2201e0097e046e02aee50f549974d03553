@@ -1,0 +1,127 @@
+.npmrc
+  s_71a3b49c0bdf46::t_da1bb05de39f52 1-2
+package-lock.json
+  s_71a3b49c0bdf46::t_b3c1ef2642392a 73,79-80,91-93,112-114,136-138,209-211,215-216,329-331,335,345-347,369-371,376,378,380,388-390,419-421,439-441,463-465,479-480,514-516,559-561,1011-1013,1029-1031,1034,1038-1040,1043-1044,1048-1050,1053,1061-1063,1079-1081,1699-1701,1709-1711,1719-1721,1736-1738,1753-1755,1770-1772,1787-1789,1804-1806,1821-1823,1838-1840,1855-1857,1872-1874,1889-1891,1906-1908,1923-1925,1940-1942,1957-1959,1974-1976,1991-1993,2008-2010,2025-2027,2042-2044,2056-2058,2070-2072,2084-2086,2098-2100,2112-2114,2126-2128,2143-2145,2160-2162,2177-2179,2194-2196,2211-2213,2228-2230,2245-2247,2262-2264,2279-2281,2296-2298,2313-2315,2330-2332,2347-2349,2364-2366,2381-2383,2398-2400,2415-2417,2432-2434,2449-2451,2520-2522,4382-4384,4421-4423,4818-4820,4825-4826,4837,4841-4843,4849,4855,4859-4861,4866,4880-4881,4890-4892,4898-4899,4908-4910,4914,4935-4937,4948-4950,4954,4962-4964,4968-4969,4978-4980,4988-4990,4994,5003-5005,5009-5014,5020-5027,5033,5044,5103-5106,5108-5114,5116-5361,5365-5367,5382-5384,5399-5401,5416-5418,5433-5435,5450-5452,5467-5469,5484-5486,5507-5513,5515-5518,5520-5526,5528-5531,5533-5822,5827-5836,5843-5845,5899-5901,5931-5933,5987-5989,6007-6011,6021-6023,6192-6194,6340-6342,6354-6356,6361,6368-6370,6374,6399-6401,6521-6523,6526,6631-6633,6726-6728,6882-6884,6930-6932,7396-7398,7402-7403,7424-7426,7531-7533,7563-7565,7582-7584,7611-7613,7619-7622,7668-7670,7686-7704,7720-7722,7735-7753,7756,7769-7771,7778-7783,7787-7789,7793,7896-7898,7916,7925-7927,7956-7958,8056,8273-8275,8282-8284,8338-8340,8405-8407,8498-8500,8512-8514,8544-8546,8589-8591,8612-8614,8622-8624,8628,8635-8637,8665-8667,8697-8699,8703,8782-8784,8865-8868,8872-8877,8880,8883-8890,8894,8896,8900,8907-8909,8913-8915,8931-8933,8952-8960,8967-8988,9000-9007,9010-9011,9022-9025,9027-9033,9035-9070,9073-9079,9081-9085,9087,9090-9280,9284-9286,9290-9296,9324-9329,9477-9492,9494-9496,9550-9552,9578-9623
+package.json
+  s_71a3b49c0bdf46::t_952e1abc6239ca 118,124-125,129-131
+src/app/vite-preload-recovery.test.ts
+  s_71a3b49c0bdf46::t_fea4c77058dc96 1
+src/features/docs/docs-content.test.ts
+  s_71a3b49c0bdf46::t_926199fb16d4d1 1
+src/features/editor/agent/tools/mcp.test.ts
+  s_71a3b49c0bdf46::t_98d5c87ebd819d 1
+src/features/editor/utils/color-grade-thumbnail-treatment.test.ts
+  s_71a3b49c0bdf46::t_7477ac2f6b5314 3
+src/features/keyframes/components/dopesheet-editor/dopesheet-live-pixel-geometry.test.ts
+  s_71a3b49c0bdf46::t_7a3608706b80a2 1
+src/features/keyframes/components/dopesheet-editor/easings-dev-presets.test.ts
+  s_71a3b49c0bdf46::t_ef662f825d44f7 3
+src/features/keyframes/components/dopesheet-editor/graph-visibility-storage.test.ts
+  s_71a3b49c0bdf46::t_b6c8c43813946e 1
+src/features/keyframes/components/dopesheet-editor/segment-spans.test.ts
+  s_71a3b49c0bdf46::t_c9b1689f2efe7b 3
+src/features/keyframes/utils/bake-motion.test.ts
+  s_71a3b49c0bdf46::t_951c5a40df0fde 3
+src/features/keyframes/utils/easing-presets.test.ts
+  s_71a3b49c0bdf46::t_5c1b5075c72796 3
+src/features/keyframes/utils/motion-generator.test.ts
+  s_71a3b49c0bdf46::t_8205b445a256db 3
+src/features/keyframes/utils/motion-modifier-eval.test.ts
+  s_71a3b49c0bdf46::t_6a517b5e70df47 3
+src/features/keyframes/utils/motion-presets.test.ts
+  s_71a3b49c0bdf46::t_5ce34e46b1dd7d 1
+src/features/keyframes/utils/procedural-preview.test.ts
+  s_71a3b49c0bdf46::t_3ea86d73134e3b 3
+src/features/keyframes/utils/trigger-wave-motion-layer.test.ts
+  s_71a3b49c0bdf46::t_a7255495887092 1
+src/features/media-library/frame-interpolation-constants.test.ts
+  s_71a3b49c0bdf46::t_73fabe9e6c44f5 3
+src/features/media-library/transcription/lib/whisper-runtime-options.test.ts
+  s_71a3b49c0bdf46::t_02a311740e953d 1,6
+src/features/media-library/transcription/lib/whisper-word-timings.test.ts
+  s_71a3b49c0bdf46::t_a3d9972f4cefd7 1
+src/features/media-library/utils/audio-packet-timeline.test.ts
+  s_71a3b49c0bdf46::t_8046ab6f84cc1a 3
+src/features/media-library/workers/render-support.test.ts
+  s_71a3b49c0bdf46::t_77b7f928e892aa 3
+src/features/preview/components/power-window-overlay.test.ts
+  s_71a3b49c0bdf46::t_18803bfdaa4703 1
+src/features/preview/components/selectable-item.test.tsx
+  s_71a3b49c0bdf46::t_c0af19b2dcf289 2
+src/features/preview/stores/gizmo-store.interaction.test.ts
+  s_71a3b49c0bdf46::t_8a6d322e13a4dd 1,81
+src/features/preview/stores/use-item-gizmo-preview.test.tsx
+  s_71a3b49c0bdf46::t_0a9ae7a04e4c8f 2,28,53
+src/features/preview/utils/crop-gizmo.test.ts
+  s_71a3b49c0bdf46::t_ad31a42a99f631 1
+src/features/preview/utils/dom-text-scrub-overlay.test.ts
+  s_71a3b49c0bdf46::t_8edc0655f93be7 3
+src/features/preview/utils/gizmo-preview-presentation.test.ts
+  s_71a3b49c0bdf46::t_a06ff51dbd4807 1
+src/features/preview/utils/gizmo-transform-interaction.test.ts
+  s_71a3b49c0bdf46::t_69db77f279d94e 1,82
+src/features/preview/utils/position-link-ownership.test.ts
+  s_71a3b49c0bdf46::t_795b02d575cb4c 1
+src/features/preview/utils/preview-capture-frame.test.ts
+  s_71a3b49c0bdf46::t_7d8dddbd74c3ec 3
+src/features/timeline/components/edit-keyframe-panel-model.test.ts
+  s_71a3b49c0bdf46::t_0ca4833d5aee0c 1
+src/features/timeline/components/timeline-settled-content-zoom-provider.test.tsx
+  s_71a3b49c0bdf46::t_be0ceb30ad5d85 3
+src/features/timeline/utils/fit-filmstrip-frame-size.test.ts
+  s_71a3b49c0bdf46::t_ac8c020304be56 1
+src/features/timeline/utils/source-range-intervals.test.ts
+  s_71a3b49c0bdf46::t_9b1c69ae499807 3
+src/features/timeline/utils/transcript-clipboard.test.ts
+  s_71a3b49c0bdf46::t_b1ac893126de0b 3
+src/features/timeline/utils/transcript-edit-model.test.ts
+  s_71a3b49c0bdf46::t_fefb2f3a086117 1
+src/features/timeline/utils/transcript-fuzzy.test.ts
+  s_71a3b49c0bdf46::t_cc9eee5c549d6a 3
+src/i18n/lazy-locales.test.ts
+  s_71a3b49c0bdf46::t_e889e7124b8522 9
+src/infrastructure/gpu-effects/effects/blur.test.ts
+  s_71a3b49c0bdf46::t_c887fbf5f4fdbb 3,17
+src/infrastructure/interpolation/frame-tensor.test.ts
+  s_71a3b49c0bdf46::t_95d3ffb1edd7f9 3
+src/infrastructure/interpolation/interpolate-gap.test.ts
+  s_71a3b49c0bdf46::t_a0a4aa36faebcc 3
+src/infrastructure/interpolation/rife-interpolator.test.ts
+  s_71a3b49c0bdf46::t_fec9958700d388 3
+src/infrastructure/upscale/upscale-size.test.ts
+  s_71a3b49c0bdf46::t_b745e8090bdac5 3
+src/runtime/composition-runtime/components/hooks/use-visual-freeze-frame.test.ts
+  s_71a3b49c0bdf46::t_1c0cb0b6a6c319 1
+src/runtime/composition-runtime/utils/gizmo-dom-translation.test.ts
+  s_71a3b49c0bdf46::t_9c423f44995322 1
+src/shared/timeline/io-range/io-range-geometry.test.ts
+  s_71a3b49c0bdf46::t_d3290a4703d48f 3
+src/shared/timeline/marker-names.test.ts
+  s_71a3b49c0bdf46::t_7559f4aae8c92a 3
+src/shared/timeline/timeline-annotations.test.ts
+  s_71a3b49c0bdf46::t_b8b09fd81bdd2d 3
+src/shared/utils/planar-rgb.test.ts
+  s_71a3b49c0bdf46::t_d7b29f3a756076 3
+src/shared/utils/render-progress.test.ts
+  s_71a3b49c0bdf46::t_9c92300c547c01 3
+src/shared/utils/time-utils.test.ts
+  s_71a3b49c0bdf46::t_17bf117357f1a4 3
+src/shared/utils/transcript-text.test.ts
+  s_71a3b49c0bdf46::t_287394d3665bd3 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "984f3c2201e0097e046e02aee50f549974d03553",
+  "prompts": {},
+  "sessions": {
+    "s_71a3b49c0bdf46": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d1129124-4b50-493c-a6b0-9bd30f8b1e4d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "MK <fengmk2@gmail.com>"
+    }
+  }
+}
