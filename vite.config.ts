@@ -76,6 +76,7 @@ export default defineConfig({
     '*.{js,ts,tsx,json}': 'vp check --fix',
   },
   test: {
+    clearMocks: false,
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
