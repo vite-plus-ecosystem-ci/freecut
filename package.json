@@ -115,17 +115,20 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.1",
-    "@vitest/coverage-v8": "4.1.10",
+    "@vitest/coverage-v8": "4.1.11",
     "@webgpu/types": "0.1.69",
     "jsdom": "27.4.0",
     "playwright": "1.60.0",
     "tailwindcss": "4.2.2",
     "typescript": "7.0.2",
-    "vite-plus": "0.2.4"
+    "vite-plus": "0.0.0-commit.fba044cf40fea5a7bf4a2ee97822f174eab33dfa",
+    "vitest": "4.1.11"
   },
   "overrides": {
     "esbuild": "0.28.1",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.0.0-commit.fba044cf40fea5a7bf4a2ee97822f174eab33dfa",
+    "vitest": "4.1.11"
   },
   "packageManager": "npm@11.8.0"
 }
