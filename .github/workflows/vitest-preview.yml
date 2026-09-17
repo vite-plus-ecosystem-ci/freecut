@@ -1,0 +1,15 @@
+name: Vitest preview verification
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  vitest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version: '24'
+      - run: vp test run --coverage
