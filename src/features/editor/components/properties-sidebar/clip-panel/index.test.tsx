@@ -74,6 +74,7 @@ vi.mock('./text-section', () => ({
     )
   },
   TextEffectsSection: () => <div>Text Effects Body</div>,
+  TextStyleSection: () => <div>Text Style Body</div>,
 }))
 
 vi.mock('./shape-section', () => ({
